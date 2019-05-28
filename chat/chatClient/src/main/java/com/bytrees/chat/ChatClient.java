@@ -1,6 +1,7 @@
 package com.bytrees.chat;
 
 import java.net.InetSocketAddress;
+import java.util.Scanner;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -39,7 +40,14 @@ public class ChatClient {
 				}
     		});
     		ChannelFuture future = boot.connect().sync();
-    		future.channel().close().sync();
+            //消息发送和接收
+    		Scanner sc = new Scanner(System.in);
+    		while (sc.hasNext()) {
+    			String message = sc.nextLine();
+    			future.channel().writeAndFlush(Unpooled.copiedBuffer(message, CharsetUtil.UTF_8)).sync();
+    		}
+    		future.channel().closeFuture().sync();
+    		sc.close();
     	} finally {
     		group.shutdownGracefully().sync();
     	}
@@ -55,7 +63,7 @@ public class ChatClient {
 		@Override
 		public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 			// TODO Auto-generated method stub
-			System.out.println("Received: " + msg.toString(CharsetUtil.UTF_8));
+			System.out.println("[server]" + msg.toString(CharsetUtil.UTF_8));
 		}
 
 		/**

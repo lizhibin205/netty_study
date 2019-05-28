@@ -39,3 +39,7 @@ jar {
             "Main-Class": "com.bytrees.chat.ChatClient")
     }
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

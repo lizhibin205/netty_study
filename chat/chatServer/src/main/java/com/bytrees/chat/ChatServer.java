@@ -16,6 +16,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
 
 public class ChatServer {
 	private final static int PORT = 9100;
@@ -44,7 +45,6 @@ public class ChatServer {
     		});
     		ChannelFuture future = boot.bind().sync();
     		future.channel().closeFuture().sync();
-    		
     	} finally {
     		group.shutdownGracefully().sync();
     	}
@@ -58,17 +58,21 @@ public class ChatServer {
     	@Override
     	public void channelRead(ChannelHandlerContext ctx, Object msg) {
     		ByteBuf in = (ByteBuf) msg;
-    		System.out.println("Server received: " + in.toString(CharsetUtil.UTF_8));
-    		//将接收到的消息写给发送者， 而不冲刷出站消息
-    		ctx.write(in);
+    		System.out.println("[" + ctx.channel().remoteAddress().toString() + "]" + in.toString(CharsetUtil.UTF_8));
+    		//将接收到的消息写给发送者
+    		ctx.writeAndFlush(in);
+    		//需要显式释放资源
+    		ReferenceCountUtil.release(msg);
     	}
 
     	/**
+    	 * 读取完成后事件
     	 * 通知ChannelInboundHandler最后一次channelRead的调用是当前批量读取中的最后一条消息
     	 */
     	@Override
     	public void channelReadComplete(ChannelHandlerContext ctx) {
-    		ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+    		//这个实现了收到消息之后就关闭连接
+    		//ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     	}
 
     	/**
