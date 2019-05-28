@@ -27,7 +27,6 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(wsUri.toLowerCase() + "<=>" + request.uri());
 		if (wsUri.equalsIgnoreCase(request.uri())) {
 			//如果请求了WebSocket协议升级，则增加引用计算，并将它传递给下一个ChannelInboundHandler
 			ctx.fireChannelRead(request.retain());
