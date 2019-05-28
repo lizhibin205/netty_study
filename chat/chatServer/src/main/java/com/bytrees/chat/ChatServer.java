@@ -60,7 +60,7 @@ public class ChatServer {
     		ByteBuf in = (ByteBuf) msg;
     		System.out.println("[" + ctx.channel().remoteAddress().toString() + "]" + in.toString(CharsetUtil.UTF_8));
     		//将接收到的消息写给发送者
-    		ctx.writeAndFlush(in);
+    		ctx.writeAndFlush(Unpooled.copiedBuffer("Hello Client...", CharsetUtil.UTF_8));
     		//需要显式释放资源
     		ReferenceCountUtil.release(msg);
     	}
