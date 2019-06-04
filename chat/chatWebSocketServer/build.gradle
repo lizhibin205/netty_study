@@ -27,6 +27,7 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:23.0'
     implementation 'io.netty:netty-all:4.1.36.Final'
+    implementation 'com.alibaba:fastjson:1.2.58'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -36,7 +37,7 @@ jar {
     manifest {
         attributes(
             "Manifest-Version": 1.0,
-            "Main-Class": "com.bytrees.chat.ChatServer")
+            "Main-Class": "com.bytrees.chat.WebSocketServer")
     }
 }
 

@@ -15,7 +15,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object event) throws Exception {
-		if (event == WebSocketServerProtocolHandler.ServerHandshakeStateEvent.HANDSHAKE_COMPLETE) {
+		if (event instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
 			//如果握手成功，移除pipline中的http消息，因为之后不会再使用http了
 			ctx.pipeline().remove(HttpRequestHandler.class);
 			//通知所有客户端有新人加入
