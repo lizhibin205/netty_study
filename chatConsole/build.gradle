@@ -87,4 +87,13 @@ project("chatMessage") {
         implementation 'com.google.protobuf:protobuf-java:3.8.0'
         testImplementation 'junit:junit:4.12'
     }
+    task runIdl {
+        println project.name
+        println "start build all idl..."
+        fileTree("idl").each { file ->
+            def command = "protoc --proto_path=chatMessage/idl --java_out=chatMessage/src/main/java " + file.name
+            println command
+            println command.execute().text
+        }
+    }
 }
