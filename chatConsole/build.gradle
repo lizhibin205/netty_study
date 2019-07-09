@@ -10,7 +10,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "4.0.4"
 }
 
-subprojects {
+allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'eclipse'
@@ -21,15 +21,13 @@ subprojects {
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
     repositories {
-        mavenLocal()
-        mavenCentral()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
 
     dependencies {
         testImplementation 'junit:junit:4.12'
     }
 }
-
 
 project("chatServer") {
     apply plugin: 'com.github.johnrengelman.shadow'
@@ -78,8 +76,6 @@ project("chatClient") {
 }
 
 project("chatMessage") {
-    apply plugin: 'java-library'
-
     group = 'com.bytrees.chat'
     version = '1.0.0'
     description = "chatMessage project"
@@ -88,6 +84,7 @@ project("chatMessage") {
         enabled = true
     }
     dependencies {
+        implementation 'com.google.protobuf:protobuf-java:3.8.0'
         testImplementation 'junit:junit:4.12'
     }
 }
