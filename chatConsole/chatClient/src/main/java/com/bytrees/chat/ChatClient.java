@@ -1,10 +1,13 @@
 package com.bytrees.chat;
 
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.bytrees.chat.message.ConsoleMessage;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -24,6 +27,7 @@ public class ChatClient {
 	private static final String SERVER_HOST = "127.0.0.1";
 	private static final int SERVER_PORT = 9100;
 	private static final Logger logger = LoggerFactory.getLogger(ChatClient.class);
+	private static final long USER_ID = new Date().getTime();//把当前时间作为userId
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat client start...");
@@ -46,8 +50,14 @@ public class ChatClient {
 			ChannelFuture future = boot.connect().sync();
 			//消息发送和接收
 			while (sc.hasNext()) {
-				String message = sc.nextLine();
-				future.channel().writeAndFlush(Unpooled.copiedBuffer(message, CharsetUtil.UTF_8)).sync();
+				String readLine = sc.nextLine();
+
+				ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+				builder.setUserId(USER_ID);
+				builder.setMessage(readLine);
+				ConsoleMessage.ConsoleMessageIdl message = builder.build();
+
+				future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
 			}
 			future.channel().closeFuture().sync();
 		} finally {
@@ -59,7 +69,12 @@ public class ChatClient {
 	class EchoClientChannel extends SimpleChannelInboundHandler<ByteBuf> {
 		@Override
 		public void channelActive(ChannelHandlerContext ctx) {
-			ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!", CharsetUtil.UTF_8));
+			//当链接激活时，向服务器发送通知
+			ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+			builder.setUserId(USER_ID);
+			builder.setMessage("hello world!");
+			ConsoleMessage.ConsoleMessageIdl message = builder.build();
+			ctx.writeAndFlush(Unpooled.copiedBuffer(message.toByteArray()));
 		}
 
 		@Override

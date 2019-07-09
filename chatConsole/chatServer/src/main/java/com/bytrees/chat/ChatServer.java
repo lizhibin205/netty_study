@@ -1,9 +1,13 @@
 package com.bytrees.chat;
 
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.bytrees.chat.message.ConsoleMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -60,9 +64,25 @@ public class ChatServer {
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) {
 			ByteBuf in = (ByteBuf) msg;
-			logger.info("[{}]{}", ctx.channel().remoteAddress().toString(), in.toString(CharsetUtil.UTF_8));
-			//将接收到的消息写给发送者
-			ctx.writeAndFlush(Unpooled.copiedBuffer("Hello Client...", CharsetUtil.UTF_8));
+			String remoteAddress = ctx.channel().remoteAddress().toString();
+			try {
+				//不要使用in.array()
+				//Netty默认的I/O Buffer使用直接内存DirectByteBuf，可以减少Socket读写的内存拷贝，即著名的 ”零拷贝”。
+				//由于是直接内存，因此无法直接转换成堆内存，因此它并不支持array()方法。用户需要自己做内存拷贝。
+				byte[] readIn = new byte[in.readableBytes()];
+				ConsoleMessage.ConsoleMessageIdl readMessage = ConsoleMessage.ConsoleMessageIdl.parseFrom(readIn);
+				ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+				builder.setUserId(0);
+				builder.setMessage("Received: " + readMessage.getMessage());
+				ConsoleMessage.ConsoleMessageIdl message = builder.build();
+				//向客户端发送信息
+				ctx.writeAndFlush(Unpooled.copiedBuffer(message.toByteArray()));
+				logger.warn("[{}] {}", remoteAddress, readMessage.getMessage());
+			} catch (InvalidProtocolBufferException ex) {
+				ctx.writeAndFlush(Unpooled.copiedBuffer("Your message broken.", CharsetUtil.UTF_8));
+				logger.warn("[{}] {}", remoteAddress, "Client message broken.", ex);
+			}
+
 			//需要显式释放资源
 			ReferenceCountUtil.release(msg);
 		}
