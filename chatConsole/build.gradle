@@ -7,26 +7,33 @@
  */
 
 plugins {
-  id 'java'
-  id 'java-library'
-  id 'com.github.johnrengelman.shadow' version '4.0.4'
-}
-
-repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    id "com.github.johnrengelman.shadow" version "4.0.4"
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'eclipse'
+
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.12'
+    }
 }
 
+
 project("chatServer") {
+    apply plugin: 'com.github.johnrengelman.shadow'
+
     group = 'com.bytrees.chat'
     version = '1.0.0'
     description = "chatServer project"
@@ -48,6 +55,8 @@ project("chatServer") {
 }
 
 project("chatClient") {
+    apply plugin: 'com.github.johnrengelman.shadow'
+
     group = 'com.bytrees.chat'
     version = '1.0.0'
     description = "chatChat project"
