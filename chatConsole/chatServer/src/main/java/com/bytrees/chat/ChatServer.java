@@ -70,6 +70,7 @@ public class ChatServer {
 				//Netty默认的I/O Buffer使用直接内存DirectByteBuf，可以减少Socket读写的内存拷贝，即著名的 ”零拷贝”。
 				//由于是直接内存，因此无法直接转换成堆内存，因此它并不支持array()方法。用户需要自己做内存拷贝。
 				byte[] readIn = new byte[in.readableBytes()];
+				in.getBytes(in.readerIndex(), readIn);
 				ConsoleMessage.ConsoleMessageIdl readMessage = ConsoleMessage.ConsoleMessageIdl.parseFrom(readIn);
 				ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
 				builder.setUserId(0);
@@ -77,7 +78,7 @@ public class ChatServer {
 				ConsoleMessage.ConsoleMessageIdl message = builder.build();
 				//向客户端发送信息
 				ctx.writeAndFlush(Unpooled.copiedBuffer(message.toByteArray()));
-				logger.warn("[{}] {}", remoteAddress, readMessage.getMessage());
+				logger.info("[{}] {}", remoteAddress, readMessage.getMessage());
 			} catch (InvalidProtocolBufferException ex) {
 				ctx.writeAndFlush(Unpooled.copiedBuffer("Your message broken.", CharsetUtil.UTF_8));
 				logger.warn("[{}] {}", remoteAddress, "Client message broken.", ex);
