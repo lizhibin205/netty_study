@@ -1,0 +1,3 @@
+rootProject.name = 'chatWebSocket'
+include 'chatServer'
+include 'chatMessage'
