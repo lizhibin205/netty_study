@@ -18,7 +18,7 @@ public class WebSocketServer {
 	private static final int SERVER_PORT = 9100;
 	private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 
-	public static void main(String[] args)  throws Exception  {
+	public static void main(String[] args) {
 		logger.info("Starting web socket server...");
 		new WebSocketServer().run();
 		logger.info("bye");

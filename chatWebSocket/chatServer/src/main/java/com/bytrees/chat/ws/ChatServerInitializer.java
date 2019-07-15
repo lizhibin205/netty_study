@@ -25,8 +25,8 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
 		pipeline.addLast(new HttpServerCodec());
 		pipeline.addLast(new ChunkedWriteHandler());
 		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
-		pipeline.addLast(new HttpRequestHandler("/"));
-		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
+		pipeline.addLast(new HttpRequestHandler("/ws"));
+		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 		pipeline.addLast(new TextWebSocketFrameHandler(group));
 	}
 }

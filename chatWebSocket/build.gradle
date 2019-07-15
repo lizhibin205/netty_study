@@ -40,7 +40,7 @@ project("chatServer") {
         manifest {
            attributes(
                "Manifest-Version": 1.0,
-               "Main-Class": "com.bytrees.chat.ws.ChatServer")
+               "Main-Class": "com.bytrees.chat.ws.WebSocketServer")
         }
     }
     dependencies {
