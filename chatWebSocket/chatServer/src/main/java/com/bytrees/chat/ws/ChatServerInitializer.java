@@ -1,7 +1,7 @@
-package com.bytrees.chat;
+package com.bytrees.chat.ws;
 
-import com.bytrees.chat.ChannelHandler.HttpRequestHandler;
-import com.bytrees.chat.ChannelHandler.TextWebSocketFrameHandler;
+import com.bytrees.chat.ws.channelhandler.HttpRequestHandler;
+import com.bytrees.chat.ws.channelhandler.TextWebSocketFrameHandler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -21,7 +21,6 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
 
 	@Override
 	protected void initChannel(Channel ch) throws Exception {
-		// TODO Auto-generated method stub
 		ChannelPipeline pipeline = ch.pipeline();
 		pipeline.addLast(new HttpServerCodec());
 		pipeline.addLast(new ChunkedWriteHandler());
