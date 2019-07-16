@@ -21,7 +21,7 @@ import io.netty.util.CharsetUtil;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 	private static final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
-	private String wsUri;
+	private final String wsUri;
 
 	public HttpRequestHandler(String wsUri) {
 		this.wsUri = wsUri;
@@ -29,38 +29,50 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
+		String requestUri = request.uri();
 		if (wsUri.equalsIgnoreCase(request.uri())) {
-			//如果请求了WebSocket协议升级，则增加引用计算，并将它传�?�给下一个ChannelInboundHandler
-			ctx.fireChannelRead(request.retain());
-		} else {
-			if (HttpUtil.is100ContinueExpected(request)) {
-				//处理100 Continue请求，以符合HTTP 1.1 规范
-				FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
-				ctx.writeAndFlush(response);
-			}
-			String returnStr = "ok";
-			HttpResponse response = new DefaultHttpResponse(request.protocolVersion(), HttpResponseStatus.OK);
-			response.headers().set("Content-Type", "text/plain; charset=UTF-8");
+			// 如果请求了WebSocket协议升级，则增加引用计数，调用retain方法
+			// 并将它传递给下一个ChannelInboundHandler
+			responseWebsocket(ctx, request);
+			logger.info("A websocket client connected. Request: {}", requestUri);
+			return;
+		}
 
-			//判断是否keepalive
-			boolean isKeepalive = HttpUtil.isKeepAlive(request);
-			if (isKeepalive) {
-				response.headers().set("Content-Length", returnStr.length());
-				response.headers().set("Connection", "keep-alive");
-			}
-			ctx.write(response);
+		responseHttp(ctx, request);
+	}
 
-			//判断是否https
-			//if (ctx.pipeline().get(SslHandler.class) == null) {
-			//	ctx.write(Unpooled.copiedBuffer(returnStr, CharsetUtil.UTF_8));
-			//} else {
-			//	ctx.write(Unpooled.copiedBuffer(returnStr, CharsetUtil.UTF_8));
-			//}
-			ctx.write(Unpooled.copiedBuffer(returnStr, CharsetUtil.UTF_8));
-			ChannelFuture future = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-			if (! isKeepalive) {
-				future.addListener(ChannelFutureListener.CLOSE);
-			}
+	/**
+	 * 响应并升级到webSocket协议
+	 */
+	protected void responseWebsocket(ChannelHandlerContext ctx, FullHttpRequest request) {
+		ctx.fireChannelRead(request.retain());
+		if (HttpUtil.is100ContinueExpected(request)) {
+			//处理100 Continue请求，以符合HTTP 1.1 规范
+			FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
+			ctx.writeAndFlush(response);
+		}
+	}
+
+	/**
+	 * 响应HTTP协议
+	 */
+	protected void responseHttp(ChannelHandlerContext ctx, FullHttpRequest request) {
+		// 这里处理HTTP协议
+		final String returnStr = "ok";
+		HttpResponse response = new DefaultHttpResponse(request.protocolVersion(), HttpResponseStatus.OK);
+		response.headers().set("Content-Type", "text/plain; charset=UTF-8");
+
+		//判断是否keepalive
+		boolean isKeepalive = HttpUtil.isKeepAlive(request);
+		if (isKeepalive) {
+			response.headers().set("Content-Length", returnStr.length());
+			response.headers().set("Connection", "keep-alive");
+		}
+		ctx.write(response);
+		ctx.write(Unpooled.copiedBuffer(returnStr, CharsetUtil.UTF_8));
+		ChannelFuture future = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+		if (! isKeepalive) {
+			future.addListener(ChannelFutureListener.CLOSE);
 		}
 	}
 
