@@ -1,24 +1,21 @@
 <template>
-    <div>
+    <div id="wsMessage">
         <el-row>
-            <div id="wsMessageData">
-                <div>
-                    <p class="client-message">你 15:44:38</p>
-                    <p>414124121241241241</p>
-                </div>
-                <div>
-                    <p class="server-message">服务器 15:44:38</p>
-                    <p>414124121241241241</p>
+            <div id="wsMessageData" ref="wsMessageData">
+                <div v-for="(message, index) in wsMessageList" :key="index">
+                    <p :class="message.type + '-message'">{{message.type}} {{message.timeTag}}</p>
+                    <p>{{message.message}}</p>
                 </div>
             </div>
         </el-row>
-        <el-row>
-            <el-col :span="8"><el-input v-model="wsMessage" placeholder="聊天内容"></el-input></el-col>
-            <el-col :span="16"><el-button>发送</el-button></el-col>
+        <el-row :gutter="20">
+            <el-col :span="16" ><el-input v-model="wsMessage" placeholder="聊天内容"></el-input></el-col>
+            <el-col :span="8" ><el-button v-on:click="wsSendMessage" :disabled="!wsConnectStatus">发送</el-button></el-col>
         </el-row>
-        <el-row>
+        <el-row :gutter="20">
             <el-col :span="8"><el-input v-model="wsUrl" placeholder="ws://127.0.0.1:9100/ws"></el-input></el-col>
-            <el-col :span="16"><el-button type="primary">连接</el-button><el-button type="danger">断开</el-button></el-col>
+            <el-col :span="8"><el-button type="primary" :disabled="wsConnectStatus" v-on:click="wsConnect">连接</el-button>
+            <el-button type="danger" :disabled="!wsConnectStatus" v-on:click="wsDisconnect" >断开</el-button></el-col>
         </el-row>
     </div>
 </template>
@@ -28,7 +25,72 @@ export default {
   data () {
     return {
       wsUrl: 'ws://127.0.0.1:9100/ws',
-      wsMessage: ''
+      wsConnectStatus: false,
+      wsMessage: '',
+      wsMessageList: [],
+      websocket: null
+    }
+  },
+  methods: {
+    wsSendMessage: function () {
+      if (this.wsMessage === '') {
+        return
+      }
+      this.wsMessageList.push({
+        'type': 'client',
+        'timeTag': new Date(),
+        'message': this.wsMessage
+      })
+      if (this.wsConnectStatus) {
+        console.log('websocket send: ' + this.wsMessage)
+        this.websocket.send(this.wsMessage)
+      }
+    },
+    wsConnect: function () {
+      console.log('connect to: ' + this.wsUrl)
+      this.websocket = new WebSocket(this.wsUrl)
+      this.websocket.onopen = this.wsOnOpen
+      this.websocket.onerror = this.wsOnError
+      this.websocket.onmessage = this.wsOnMessage
+      this.websocket.onclose = this.wsOnClose
+    },
+    wsDisconnect: function () {
+      this.websocket.close()
+    },
+    wsOnOpen: function () {
+      console.log('websocket open.')
+      this.wsConnectStatus = true
+    },
+    wsOnError: function (event) {
+      console.log('websocket error: ' + event)
+    },
+    wsOnMessage: function (event) {
+      console.log('websocket received: ' + event)
+      this.wsMessageList.push({
+        'type': 'server',
+        'timeTag': new Date(),
+        'message': this.wsMessage
+      })
+    },
+    wsOnClose: function () {
+      console.log('websocket close.')
+      this.wsConnectStatus = false
+    }
+  },
+  mounted: function () {
+    this.wsMessageList.push({
+      'type': 'client',
+      'timeTag': new Date(),
+      'message': '客户端初始化完成'
+    })
+  },
+  watch: {
+    wsMessage: function (newVal, oldVal) {},
+    wsMessageList: function (newVal, oldVal) {
+      setTimeout(() => {
+        console.log('wsMessageList scroll')
+        this.$refs.wsMessageData.scrollTop = this.$refs.wsMessageData.scrollHeight
+      }, 200)
     }
   }
 }
@@ -58,8 +120,10 @@ export default {
     padding: 10px 0;
     background-color: #f9fafc;
   }
-  #wsMessageData {
+  #wsMessage {
     width: 600px;
+  }
+  #wsMessageData {
     height: 300px;
     overflow-y: scroll;
     font-size: 10px;
