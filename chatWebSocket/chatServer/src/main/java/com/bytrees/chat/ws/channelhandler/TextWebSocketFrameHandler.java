@@ -2,7 +2,6 @@ package com.bytrees.chat.ws.channelhandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.bytrees.chat.ws.room.SimpleMessage;
 
 import io.netty.channel.Channel;
@@ -49,9 +48,10 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		logger.info("Client on channelRead0. Client:{}, Message:{}", ctx.channel(), text);
 
 		//向组里面的其他Channel广播信息
-		TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
+		//TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
+
 		group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
-				text)), matcher);
+				text)));
 	}
 
 	class TextWebSocketChannelMatcher implements ChannelMatcher {

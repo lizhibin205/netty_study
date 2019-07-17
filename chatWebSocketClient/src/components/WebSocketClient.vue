@@ -69,7 +69,7 @@ export default {
       this.wsMessageList.push({
         'type': 'server',
         'timeTag': new Date(),
-        'message': this.wsMessage
+        'message': event.data
       })
     },
     wsOnClose: function () {
