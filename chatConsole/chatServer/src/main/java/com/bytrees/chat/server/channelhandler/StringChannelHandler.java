@@ -30,7 +30,7 @@ public class StringChannelHandler extends ChannelInboundHandlerAdapter {
 		in.readBytes(readIn);
 		String message = String.valueOf(readIn);
 		//向客户端发送信息
-		ctx.write(Unpooled.copiedBuffer("message", CharsetUtil.UTF_8));
+		ctx.write(Unpooled.copiedBuffer("1", CharsetUtil.UTF_8));
 		logger.info("[{}] {}", remoteAddress, message);
 
 		//需要显式释放资源

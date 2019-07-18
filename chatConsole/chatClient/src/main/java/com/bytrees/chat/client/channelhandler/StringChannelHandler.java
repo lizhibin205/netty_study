@@ -16,6 +16,7 @@ public class StringChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) {
 		//当链接激活时，向服务器发送通知
+		logger.info("client active");
 		ctx.writeAndFlush(Unpooled.copiedBuffer("hello world!", CharsetUtil.UTF_8));
 	}
 

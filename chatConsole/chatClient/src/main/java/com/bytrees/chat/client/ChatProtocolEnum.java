@@ -17,6 +17,6 @@ public enum ChatProtocolEnum {
 
 	@Override
 	public String toString() {
-		return new StringBuilder(typeId).append("-").append(typeName).toString();
+		return new StringBuilder(String.valueOf(typeId)).append("-").append(typeName).toString();
 	}
 }

@@ -1,5 +1,8 @@
 package com.bytrees.chat.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bytrees.chat.server.channelhandler.ProtobufChannelHandler;
 import com.bytrees.chat.server.channelhandler.StringChannelHandler;
 
@@ -8,9 +11,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 
 public class ChatChannelHandlerFactory {
+	private static final Logger logger = LoggerFactory.getLogger(ChatChannelHandlerFactory.class);
 	private ChatChannelHandlerFactory() {}
 
 	public static ChannelHandler getChannelInitializer(ChatProtocolEnum chatProtocol) {
+		logger.info("channel initializer: {}", chatProtocol);
 		if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
 			return new ChannelInitializer<SocketChannel>() {
 				@Override
