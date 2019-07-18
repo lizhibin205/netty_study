@@ -12,6 +12,7 @@ import com.bytrees.chat.message.ConsoleMessageIdl;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -30,11 +31,16 @@ public class ChatClient {
 
 	public void start(ChatProtocolEnum chatProtocol) throws InterruptedException {
 		EventLoopGroup group = new NioEventLoopGroup();
+		ChannelHandler channelInitializer = ChatChannelHandlerFactory.getChannelInitializer(chatProtocol);
+		if (channelInitializer == null) {
+			logger.error("channelInitializer is null.");
+			return;
+		}
 		try (Scanner sc = new Scanner(System.in)) {
 			Bootstrap boot = new Bootstrap();
 			boot.group(group).channel(NioSocketChannel.class)
 			.remoteAddress(new InetSocketAddress(SERVER_HOST, SERVER_PORT))
-			.handler(ChatChannelHandlerFactory.getChannelInitializer(chatProtocol));
+			.handler(channelInitializer);
 			ChannelFuture future = boot.connect().sync();
 			//消息发送和接收
 			while (sc.hasNext()) {
@@ -43,19 +49,14 @@ public class ChatClient {
 					break;
 				}
 
-				ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
-				builder.setUserId(USER_ID);
-				builder.setMessage(readLine);
-				ConsoleMessageIdl.ConsoleMessage message = builder.build();
-
-				//模拟粘包场景
-				//for (int i = 1; i<100; i++) {
-				//	future.channel().write(Unpooled.copiedBuffer(message.toByteArray()));
-				//}
-				//future.channel().flush();
-
-				//这里消息发送是阻塞的-永远不会粘包
-				future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
+				if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
+					ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
+					builder.setUserId(USER_ID);
+					builder.setMessage(readLine);
+					ConsoleMessageIdl.ConsoleMessage message = builder.build();
+					//这里消息发送是阻塞的-永远不会粘包
+					future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
+				}
 			}
 			future.channel().closeFuture().sync();
 		} finally {

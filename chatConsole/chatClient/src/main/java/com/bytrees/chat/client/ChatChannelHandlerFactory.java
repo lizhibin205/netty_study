@@ -13,7 +13,7 @@ public class ChatChannelHandlerFactory {
 		if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
 			
 		} else if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
-			new ChannelInitializer<SocketChannel>() {
+			return new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ch.pipeline().addLast(new ProtobufChannelHandler());
