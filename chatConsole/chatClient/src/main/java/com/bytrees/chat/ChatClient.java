@@ -21,7 +21,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
 
 public class ChatClient {
 	private static final String SERVER_HOST = "127.0.0.1";
@@ -79,7 +78,9 @@ public class ChatClient {
 
 		@Override
 		public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-			logger.info("[server]{}", msg.toString(CharsetUtil.UTF_8));
+			byte[] data = new byte[msg.readableBytes()];
+			msg.readBytes(data);
+			logger.info("[server]{}", data);
 		}
 
 		/**
