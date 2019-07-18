@@ -16,6 +16,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.CharsetUtil;
 
 public class ChatClient {
 	private static final String SERVER_HOST = "127.0.0.1";
@@ -25,7 +26,7 @@ public class ChatClient {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat client start...");
-		new ChatClient().start(ChatProtocolEnum.PROTOBUF);
+		new ChatClient().start(ChatProtocolEnum.STRINGLINE);
 		logger.info("bye.");
 	}
 
@@ -49,7 +50,11 @@ public class ChatClient {
 					break;
 				}
 
-				if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
+				if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
+					//这里消息发送是阻塞的-永远不会粘包
+					logger.info("send: {}", readLine);
+					future.channel().writeAndFlush(Unpooled.copiedBuffer(readLine, CharsetUtil.UTF_8)).sync();
+				} else if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
 					ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 					builder.setUserId(USER_ID);
 					builder.setMessage(readLine);

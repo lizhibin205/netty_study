@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -19,7 +20,7 @@ public class ChatServer {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat server start...");
-		new ChatServer().start(ChatProtocolEnum.PROTOBUF);
+		new ChatServer().start(ChatProtocolEnum.STRINGLINE);
 		logger.info("bye.");
 	}
 
@@ -27,15 +28,21 @@ public class ChatServer {
 	 * 在main线程中启动服务
 	 */
 	public void start(ChatProtocolEnum chatProtocol) throws InterruptedException {
+		logger.info("Server Protocol: {}", chatProtocol);
 		//创建NIO的服务端线程组
 		final EventLoopGroup group = new NioEventLoopGroup();
+		final ChannelHandler channelInitializer = ChatChannelHandlerFactory.getChannelInitializer(chatProtocol);
+		if (channelInitializer == null) {
+			logger.error("channelInitializer is null.");
+			return;
+		}
 		try {
 			ServerBootstrap boot = new ServerBootstrap();
 			boot.group(group)
 			.channel(NioServerSocketChannel.class)
 			.option(ChannelOption.SO_BACKLOG, 128)
 			.localAddress(new InetSocketAddress(PORT))
-			.childHandler(ChatChannelHandlerFactory.getChannelInitializer(chatProtocol));
+			.childHandler(channelInitializer);
 			//绑定端口，同步等待成功-这里会阻塞主线程main
 			ChannelFuture future = boot.bind().sync();
 			//等等服务端监听端口关闭
