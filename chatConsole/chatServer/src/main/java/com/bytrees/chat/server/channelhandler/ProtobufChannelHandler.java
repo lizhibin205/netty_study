@@ -1,4 +1,4 @@
-package com.bytrees.chat.channelhandler;
+package com.bytrees.chat.server.channelhandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

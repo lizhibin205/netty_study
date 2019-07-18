@@ -1,6 +1,6 @@
-package com.bytrees.chat;
+package com.bytrees.chat.server;
 
-import com.bytrees.chat.channelhandler.ProtobufChannelHandler;
+import com.bytrees.chat.server.channelhandler.ProtobufChannelHandler;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;

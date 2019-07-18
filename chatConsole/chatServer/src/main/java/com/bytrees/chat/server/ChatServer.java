@@ -1,4 +1,4 @@
-package com.bytrees.chat;
+package com.bytrees.chat.server;
 
 import java.net.InetSocketAddress;
 

@@ -1,4 +1,4 @@
-package com.bytrees.chat;
+package com.bytrees.chat.server;
 
 public enum ChatProtocolEnum {
 	STRINGLINE(1),

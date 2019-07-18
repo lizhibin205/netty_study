@@ -32,7 +32,7 @@ subprojects {
 project("chatServer") {
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    group = 'com.bytrees.chat'
+    group = 'com.bytrees.chat.server'
     version = '1.0.0'
     description = "chatServer project"
 
@@ -40,7 +40,7 @@ project("chatServer") {
         manifest {
            attributes(
                "Manifest-Version": 1.0,
-               "Main-Class": "com.bytrees.chat.ChatServer")
+               "Main-Class": "com.bytrees.chat.server.ChatServer")
         }
     }
     dependencies {
@@ -57,7 +57,7 @@ project("chatServer") {
 project("chatClient") {
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    group = 'com.bytrees.chat'
+    group = 'com.bytrees.chat.client'
     version = '1.0.0'
     description = "chatChat project"
 
@@ -65,7 +65,7 @@ project("chatClient") {
         manifest {
            attributes(
                "Manifest-Version": 1.0,
-               "Main-Class": "com.bytrees.chat.ChatClient")
+               "Main-Class": "com.bytrees.chat.client.ChatClient")
         }
     }
     dependencies {
@@ -81,7 +81,7 @@ project("chatClient") {
 
 project("chatMessage") {
     apply from: "$rootDir/gradle/chatMessage.gradle"
-    group = 'com.bytrees.chat'
+    group = 'com.bytrees.chat.message'
     version = '1.0.0'
     description = "chatMessage project"
 
