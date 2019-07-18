@@ -3,6 +3,7 @@ package com.bytrees.chat.client;
 import com.bytrees.chat.client.channelhandler.ProtobufChannelHandler;
 import com.bytrees.chat.client.channelhandler.StringChannelHandler;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -12,9 +13,9 @@ public class ChatChannelHandlerFactory {
 
 	public static ChannelHandler getChannelInitializer(ChatProtocolEnum chatProtocol) {
 		if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
-			return new ChannelInitializer<SocketChannel>() {
+			return new ChannelInitializer<Channel>() {
 				@Override
-				protected void initChannel(SocketChannel ch) throws Exception {
+				protected void initChannel(Channel ch) throws Exception {
 					ch.pipeline().addLast(new StringChannelHandler());
 				}
 			};
