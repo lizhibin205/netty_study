@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytrees.chat.message.ConsoleMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -55,7 +56,7 @@ public class ChatClient {
 				builder.setUserId(USER_ID);
 				builder.setMessage(readLine);
 				ConsoleMessage.ConsoleMessageIdl message = builder.build();
-
+				//这里消息发送是阻塞的
 				future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
 			}
 			future.channel().closeFuture().sync();
@@ -80,7 +81,12 @@ public class ChatClient {
 		public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 			byte[] data = new byte[msg.readableBytes()];
 			msg.readBytes(data);
-			logger.info("[server]{}", data);
+			try {
+				ConsoleMessage.ConsoleMessageIdl readMessage = ConsoleMessage.ConsoleMessageIdl.parseFrom(data);
+				logger.info("[server]{}", readMessage.getMessage());
+			} catch (InvalidProtocolBufferException ex) {
+				logger.warn("Server message broken.", ex);
+			}
 		}
 
 		/**
@@ -88,7 +94,7 @@ public class ChatClient {
 		 */
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-			logger.error("exception caught!", cause);
+			logger.error(cause.getMessage(), cause);
 			ctx.close();
 		}
 	}

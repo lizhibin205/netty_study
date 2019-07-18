@@ -112,7 +112,7 @@ public class ChatServer {
 		 */
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-			logger.error("exception caught!", cause);
+			logger.error(cause.getMessage(), cause);
 			ctx.close();
 		}
 	}
