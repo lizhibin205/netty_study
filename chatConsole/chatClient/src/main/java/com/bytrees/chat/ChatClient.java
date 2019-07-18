@@ -51,6 +51,9 @@ public class ChatClient {
 			//消息发送和接收
 			while (sc.hasNext()) {
 				String readLine = sc.nextLine();
+				if (readLine.equals("quit")) {
+					break;
+				}
 
 				ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 				builder.setUserId(USER_ID);
