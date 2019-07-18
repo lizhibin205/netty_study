@@ -7,7 +7,7 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytrees.chat.message.ConsoleMessage;
+import com.bytrees.chat.message.ConsoleMessageIdl;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.bootstrap.Bootstrap;
@@ -52,11 +52,18 @@ public class ChatClient {
 			while (sc.hasNext()) {
 				String readLine = sc.nextLine();
 
-				ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+				ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 				builder.setUserId(USER_ID);
 				builder.setMessage(readLine);
-				ConsoleMessage.ConsoleMessageIdl message = builder.build();
-				//这里消息发送是阻塞的
+				ConsoleMessageIdl.ConsoleMessage message = builder.build();
+
+				//模拟粘包场景
+				//for (int i = 1; i<100; i++) {
+				//	future.channel().write(Unpooled.copiedBuffer(message.toByteArray()));
+				//}
+				//future.channel().flush();
+
+				//这里消息发送是阻塞的-永远不会粘包
 				future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
 			}
 			future.channel().closeFuture().sync();
@@ -70,10 +77,10 @@ public class ChatClient {
 		@Override
 		public void channelActive(ChannelHandlerContext ctx) {
 			//当链接激活时，向服务器发送通知
-			ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+			ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 			builder.setUserId(USER_ID);
 			builder.setMessage("hello world!");
-			ConsoleMessage.ConsoleMessageIdl message = builder.build();
+			ConsoleMessageIdl.ConsoleMessage message = builder.build();
 			ctx.writeAndFlush(Unpooled.copiedBuffer(message.toByteArray()));
 		}
 
@@ -82,7 +89,7 @@ public class ChatClient {
 			byte[] data = new byte[msg.readableBytes()];
 			msg.readBytes(data);
 			try {
-				ConsoleMessage.ConsoleMessageIdl readMessage = ConsoleMessage.ConsoleMessageIdl.parseFrom(data);
+				ConsoleMessageIdl.ConsoleMessage readMessage = ConsoleMessageIdl.ConsoleMessage.parseFrom(data);
 				logger.info("[server]{}", readMessage.getMessage());
 			} catch (InvalidProtocolBufferException ex) {
 				logger.warn("Server message broken.", ex);

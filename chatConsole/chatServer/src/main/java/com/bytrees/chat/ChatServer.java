@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytrees.chat.message.ConsoleMessage;
+import com.bytrees.chat.message.ConsoleMessageIdl;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -80,11 +80,11 @@ public class ChatServer {
 				byte[] readIn = new byte[in.readableBytes()];
 				in.getBytes(in.readerIndex(), readIn);
 				//构造Protobuf信息
-				ConsoleMessage.ConsoleMessageIdl readMessage = ConsoleMessage.ConsoleMessageIdl.parseFrom(readIn);
-				ConsoleMessage.ConsoleMessageIdl.Builder builder = ConsoleMessage.ConsoleMessageIdl.newBuilder();
+				ConsoleMessageIdl.ConsoleMessage readMessage = ConsoleMessageIdl.ConsoleMessage.parseFrom(readIn);
+				ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 				builder.setUserId(0);
 				builder.setMessage("Received: " + readMessage.getMessage());
-				ConsoleMessage.ConsoleMessageIdl message = builder.build();
+				ConsoleMessageIdl.ConsoleMessage message = builder.build();
 				//向客户端发送信息
 				ctx.write(Unpooled.copiedBuffer(message.toByteArray()));
 				logger.info("[{}] {}", remoteAddress, readMessage.getMessage());

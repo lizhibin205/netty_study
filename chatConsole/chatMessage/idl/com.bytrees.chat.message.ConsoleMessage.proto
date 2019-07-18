@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package com.bytrees.chat.message;
 
-option java_outer_classname="ConsoleMessage";
+option java_outer_classname="ConsoleMessageIdl";
 
-message ConsoleMessageIdl
+message ConsoleMessage
 {
     int64 userId=1;
     string message=2;
