@@ -3,6 +3,7 @@ package com.bytrees.chat.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bytrees.chat.message.ConsoleMessageIdl;
 import com.bytrees.chat.server.channelhandler.DelimiterChannelHandler;
 import com.bytrees.chat.server.channelhandler.JavaChannelHandler;
 import com.bytrees.chat.server.channelhandler.ProtobufChannelHandler;
@@ -14,6 +15,10 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
@@ -39,6 +44,13 @@ public class ChatChannelHandlerFactory {
 			return new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
+					//进行半包处理
+					ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
+					//添加解码器，用于指定解码的目标是什么，否则单凭字节码是无法判断目标类型
+					ch.pipeline().addLast(new ProtobufDecoder(ConsoleMessageIdl.ConsoleMessage.getDefaultInstance()));
+					//添加编码器
+					ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
+					ch.pipeline().addLast(new ProtobufEncoder());
 					ch.pipeline().addLast(new ProtobufChannelHandler());
 				}
 			};
