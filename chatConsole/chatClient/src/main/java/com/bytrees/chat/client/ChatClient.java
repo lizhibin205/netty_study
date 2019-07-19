@@ -51,20 +51,35 @@ public class ChatClient {
 				}
 
 				if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
-					//这里消息发送是阻塞的-永远不会粘包
-					future.channel().writeAndFlush(Unpooled.copiedBuffer(readLine, CharsetUtil.UTF_8)).sync();
+					sendStringLineProtocol(future, readLine);
 				} else if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
-					ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
-					builder.setUserId(USER_ID);
-					builder.setMessage(readLine);
-					ConsoleMessageIdl.ConsoleMessage message = builder.build();
-					//这里消息发送是阻塞的-永远不会粘包
-					future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
+					sendProtobufProtocol(future, readLine);
 				}
 			}
 			future.channel().closeFuture().sync();
 		} finally {
 			group.shutdownGracefully().sync();
 		}
+	}
+
+	/**
+	 * 字符串协议内容发送
+	 */
+	private void sendStringLineProtocol(final ChannelFuture future, final String readLine) throws InterruptedException {
+		//一个可以产生粘包的例子
+		String sendLine = new StringBuilder(readLine).append("\n").toString();
+		for (int i = 1; i<=5; i++) {
+			future.channel().write(Unpooled.copiedBuffer(sendLine, CharsetUtil.UTF_8));
+		}
+		future.channel().flush();
+	}
+
+	private void sendProtobufProtocol(final ChannelFuture future, final String readLine) throws InterruptedException  {
+		ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
+		builder.setUserId(USER_ID);
+		builder.setMessage(readLine);
+		ConsoleMessageIdl.ConsoleMessage message = builder.build();
+		//这里消息发送是阻塞的-永远不会粘包
+		future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
 	}
 }

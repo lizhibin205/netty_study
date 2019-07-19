@@ -2,8 +2,6 @@ package com.bytrees.chat.server.channelhandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,16 +18,12 @@ public class StringChannelHandler extends ChannelInboundHandlerAdapter {
 	 */
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) {
-		ByteBuf in = (ByteBuf) msg;
+		String in = (String) msg;
 		String remoteAddress = ctx.channel().remoteAddress().toString();
 
-		//不要使用in.array()
-		//Netty默认的I/O Buffer使用直接内存DirectByteBuf，可以减少Socket读写的内存拷贝，即著名的 ”零拷贝”。
-		//由于是直接内存，因此无法直接转换成堆内存，因此它并不支持array()方法。用户需要自己做内存拷贝。
-		String message = String.valueOf(in.toString(CharsetUtil.UTF_8));
 		//向客户端发送信息
-		ctx.write(Unpooled.copiedBuffer(message, CharsetUtil.UTF_8));
-		logger.info("[{}] {}", remoteAddress, message);
+		ctx.write(Unpooled.copiedBuffer(new StringBuilder(in).append("\n").toString(), CharsetUtil.UTF_8));
+		logger.info("[{}] {}", remoteAddress, in);
 
 		//需要显式释放资源
 		ReferenceCountUtil.release(msg);
