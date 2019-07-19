@@ -3,8 +3,8 @@
 
 package com.bytrees.chat.message;
 
-public final class ConsoleMessage {
-  private ConsoleMessage() {}
+public final class ConsoleMessageIdl {
+  private ConsoleMessageIdl() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -14,8 +14,8 @@ public final class ConsoleMessage {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface ConsoleMessageIdlOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.bytrees.chat.message.ConsoleMessageIdl)
+  public interface ConsoleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.bytrees.chat.message.ConsoleMessage)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -34,18 +34,18 @@ public final class ConsoleMessage {
         getMessageBytes();
   }
   /**
-   * Protobuf type {@code com.bytrees.chat.message.ConsoleMessageIdl}
+   * Protobuf type {@code com.bytrees.chat.message.ConsoleMessage}
    */
-  public  static final class ConsoleMessageIdl extends
+  public  static final class ConsoleMessage extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.bytrees.chat.message.ConsoleMessageIdl)
-      ConsoleMessageIdlOrBuilder {
+      // @@protoc_insertion_point(message_implements:com.bytrees.chat.message.ConsoleMessage)
+      ConsoleMessageOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use ConsoleMessageIdl.newBuilder() to construct.
-    private ConsoleMessageIdl(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use ConsoleMessage.newBuilder() to construct.
+    private ConsoleMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private ConsoleMessageIdl() {
+    private ConsoleMessage() {
       message_ = "";
     }
 
@@ -53,7 +53,7 @@ public final class ConsoleMessage {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new ConsoleMessageIdl();
+      return new ConsoleMessage();
     }
 
     @java.lang.Override
@@ -61,7 +61,7 @@ public final class ConsoleMessage {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private ConsoleMessageIdl(
+    private ConsoleMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -111,15 +111,15 @@ public final class ConsoleMessage {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.bytrees.chat.message.ConsoleMessage.internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor;
+      return com.bytrees.chat.message.ConsoleMessageIdl.internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.bytrees.chat.message.ConsoleMessage.internal_static_com_bytrees_chat_message_ConsoleMessageIdl_fieldAccessorTable
+      return com.bytrees.chat.message.ConsoleMessageIdl.internal_static_com_bytrees_chat_message_ConsoleMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.class, com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.Builder.class);
+              com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.class, com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.Builder.class);
     }
 
     public static final int USERID_FIELD_NUMBER = 1;
@@ -211,10 +211,10 @@ public final class ConsoleMessage {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl)) {
+      if (!(obj instanceof com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage)) {
         return super.equals(obj);
       }
-      com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl other = (com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl) obj;
+      com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage other = (com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage) obj;
 
       if (getUserId()
           != other.getUserId()) return false;
@@ -241,69 +241,69 @@ public final class ConsoleMessage {
       return hash;
     }
 
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(byte[] data)
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(java.io.InputStream input)
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseDelimitedFrom(java.io.InputStream input)
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseDelimitedFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parseFrom(
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -316,7 +316,7 @@ public final class ConsoleMessage {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl prototype) {
+    public static Builder newBuilder(com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -332,26 +332,26 @@ public final class ConsoleMessage {
       return builder;
     }
     /**
-     * Protobuf type {@code com.bytrees.chat.message.ConsoleMessageIdl}
+     * Protobuf type {@code com.bytrees.chat.message.ConsoleMessage}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.bytrees.chat.message.ConsoleMessageIdl)
-        com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdlOrBuilder {
+        // @@protoc_insertion_point(builder_implements:com.bytrees.chat.message.ConsoleMessage)
+        com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.bytrees.chat.message.ConsoleMessage.internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor;
+        return com.bytrees.chat.message.ConsoleMessageIdl.internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.bytrees.chat.message.ConsoleMessage.internal_static_com_bytrees_chat_message_ConsoleMessageIdl_fieldAccessorTable
+        return com.bytrees.chat.message.ConsoleMessageIdl.internal_static_com_bytrees_chat_message_ConsoleMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.class, com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.Builder.class);
+                com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.class, com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.Builder.class);
       }
 
-      // Construct using com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.newBuilder()
+      // Construct using com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -379,17 +379,17 @@ public final class ConsoleMessage {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.bytrees.chat.message.ConsoleMessage.internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor;
+        return com.bytrees.chat.message.ConsoleMessageIdl.internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor;
       }
 
       @java.lang.Override
-      public com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl getDefaultInstanceForType() {
-        return com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.getDefaultInstance();
+      public com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage getDefaultInstanceForType() {
+        return com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl build() {
-        com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl result = buildPartial();
+      public com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage build() {
+        com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -397,8 +397,8 @@ public final class ConsoleMessage {
       }
 
       @java.lang.Override
-      public com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl buildPartial() {
-        com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl result = new com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl(this);
+      public com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage buildPartial() {
+        com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage result = new com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage(this);
         result.userId_ = userId_;
         result.message_ = message_;
         onBuilt();
@@ -439,16 +439,16 @@ public final class ConsoleMessage {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl) {
-          return mergeFrom((com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl)other);
+        if (other instanceof com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage) {
+          return mergeFrom((com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl other) {
-        if (other == com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage other) {
+        if (other == com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage.getDefaultInstance()) return this;
         if (other.getUserId() != 0L) {
           setUserId(other.getUserId());
         }
@@ -471,11 +471,11 @@ public final class ConsoleMessage {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl parsedMessage = null;
+        com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl) e.getUnfinishedMessage();
+          parsedMessage = (com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -592,51 +592,51 @@ public final class ConsoleMessage {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.bytrees.chat.message.ConsoleMessageIdl)
+      // @@protoc_insertion_point(builder_scope:com.bytrees.chat.message.ConsoleMessage)
     }
 
-    // @@protoc_insertion_point(class_scope:com.bytrees.chat.message.ConsoleMessageIdl)
-    private static final com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:com.bytrees.chat.message.ConsoleMessage)
+    private static final com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl();
+      DEFAULT_INSTANCE = new com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage();
     }
 
-    public static com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl getDefaultInstance() {
+    public static com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<ConsoleMessageIdl>
-        PARSER = new com.google.protobuf.AbstractParser<ConsoleMessageIdl>() {
+    private static final com.google.protobuf.Parser<ConsoleMessage>
+        PARSER = new com.google.protobuf.AbstractParser<ConsoleMessage>() {
       @java.lang.Override
-      public ConsoleMessageIdl parsePartialFrom(
+      public ConsoleMessage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ConsoleMessageIdl(input, extensionRegistry);
+        return new ConsoleMessage(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<ConsoleMessageIdl> parser() {
+    public static com.google.protobuf.Parser<ConsoleMessage> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<ConsoleMessageIdl> getParserForType() {
+    public com.google.protobuf.Parser<ConsoleMessage> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.bytrees.chat.message.ConsoleMessage.ConsoleMessageIdl getDefaultInstanceForType() {
+    public com.bytrees.chat.message.ConsoleMessageIdl.ConsoleMessage getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor;
+    internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_bytrees_chat_message_ConsoleMessageIdl_fieldAccessorTable;
+      internal_static_com_bytrees_chat_message_ConsoleMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -647,19 +647,19 @@ public final class ConsoleMessage {
   static {
     java.lang.String[] descriptorData = {
       "\n-com.bytrees.chat.message.ConsoleMessag" +
-      "e.proto\022\030com.bytrees.chat.message\"4\n\021Con" +
-      "soleMessageIdl\022\016\n\006userId\030\001 \001(\003\022\017\n\007messag" +
-      "e\030\002 \001(\tB\020B\016ConsoleMessageb\006proto3"
+      "e.proto\022\030com.bytrees.chat.message\"1\n\016Con" +
+      "soleMessage\022\016\n\006userId\030\001 \001(\003\022\017\n\007message\030\002" +
+      " \001(\tB\023B\021ConsoleMessageIdlb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor =
+    internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_bytrees_chat_message_ConsoleMessageIdl_fieldAccessorTable = new
+    internal_static_com_bytrees_chat_message_ConsoleMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_bytrees_chat_message_ConsoleMessageIdl_descriptor,
+        internal_static_com_bytrees_chat_message_ConsoleMessage_descriptor,
         new java.lang.String[] { "UserId", "Message", });
   }
 
