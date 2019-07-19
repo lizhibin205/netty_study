@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytrees.chat.message.ConsoleMessageIdl;
+import com.bytrees.chat.message.java.Console;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -26,11 +27,12 @@ public class ChatClient {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat client start...");
-		new ChatClient().start(ChatProtocolEnum.STRINGLINE);
+		new ChatClient().start(ChatProtocolEnum.JAVA);
 		logger.info("bye.");
 	}
 
 	public void start(ChatProtocolEnum chatProtocol) throws InterruptedException {
+		logger.info("Client Protocol: {}", chatProtocol);
 		EventLoopGroup group = new NioEventLoopGroup();
 		ChannelHandler channelInitializer = ChatChannelHandlerFactory.getChannelInitializer(chatProtocol);
 		if (channelInitializer == null) {
@@ -54,6 +56,10 @@ public class ChatClient {
 					sendStringLineProtocol(future, readLine);
 				} else if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
 					sendProtobufProtocol(future, readLine);
+				} else if (chatProtocol.equals(ChatProtocolEnum.DELIMITER)) {
+					sendDelimiterProtocol(future, readLine);
+				} else if (chatProtocol.equals(ChatProtocolEnum.JAVA)) {
+					sendJavaSerizlizableProtocol(future, readLine);
 				}
 			}
 			future.channel().closeFuture().sync();
@@ -74,6 +80,9 @@ public class ChatClient {
 		future.channel().flush();
 	}
 
+	/**
+	 * Protobuf协议发送
+	 */
 	private void sendProtobufProtocol(final ChannelFuture future, final String readLine) throws InterruptedException  {
 		ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();
 		builder.setUserId(USER_ID);
@@ -81,5 +90,21 @@ public class ChatClient {
 		ConsoleMessageIdl.ConsoleMessage message = builder.build();
 		//这里消息发送是阻塞的-永远不会粘包
 		future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
+	}
+
+	/**
+	 * 分隔符协议发送
+	 */
+	private void sendDelimiterProtocol(final ChannelFuture future, final String readLine) throws InterruptedException  {
+		//这里会不断发送信息，模拟拆包行为
+		future.channel().writeAndFlush(Unpooled.copiedBuffer(readLine, CharsetUtil.UTF_8));
+	}
+
+	/**
+	 * Java序列化协议发送
+	 */
+	private void sendJavaSerizlizableProtocol(final ChannelFuture future, final String readLine) throws InterruptedException  {
+		Console console = new Console(readLine);
+		future.channel().writeAndFlush(console);
 	}
 }
