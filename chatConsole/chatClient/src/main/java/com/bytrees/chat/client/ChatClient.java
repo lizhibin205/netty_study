@@ -52,7 +52,6 @@ public class ChatClient {
 
 				if (chatProtocol.equals(ChatProtocolEnum.STRINGLINE)) {
 					//这里消息发送是阻塞的-永远不会粘包
-					logger.info("send: {}", readLine);
 					future.channel().writeAndFlush(Unpooled.copiedBuffer(readLine, CharsetUtil.UTF_8)).sync();
 				} else if (chatProtocol.equals(ChatProtocolEnum.PROTOBUF)) {
 					ConsoleMessageIdl.ConsoleMessage.Builder builder = ConsoleMessageIdl.ConsoleMessage.newBuilder();

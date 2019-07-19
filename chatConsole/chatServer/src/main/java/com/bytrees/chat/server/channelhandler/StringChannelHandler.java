@@ -26,11 +26,9 @@ public class StringChannelHandler extends ChannelInboundHandlerAdapter {
 		//不要使用in.array()
 		//Netty默认的I/O Buffer使用直接内存DirectByteBuf，可以减少Socket读写的内存拷贝，即著名的 ”零拷贝”。
 		//由于是直接内存，因此无法直接转换成堆内存，因此它并不支持array()方法。用户需要自己做内存拷贝。
-		byte[] readIn = new byte[in.readableBytes()];
-		in.readBytes(readIn);
-		String message = String.valueOf(readIn);
+		String message = String.valueOf(in.toString(CharsetUtil.UTF_8));
 		//向客户端发送信息
-		ctx.write(Unpooled.copiedBuffer("1", CharsetUtil.UTF_8));
+		ctx.write(Unpooled.copiedBuffer(message, CharsetUtil.UTF_8));
 		logger.info("[{}] {}", remoteAddress, message);
 
 		//需要显式释放资源
