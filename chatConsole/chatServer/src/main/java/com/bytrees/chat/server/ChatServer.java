@@ -20,7 +20,7 @@ public class ChatServer {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat server start...");
-		new ChatServer().start(ChatProtocolEnum.DELIMITER);
+		new ChatServer().start(ChatProtocolEnum.JAVA);
 		logger.info("bye.");
 	}
 

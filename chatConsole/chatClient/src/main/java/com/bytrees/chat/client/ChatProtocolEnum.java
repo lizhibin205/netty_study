@@ -3,7 +3,8 @@ package com.bytrees.chat.client;
 public enum ChatProtocolEnum {
 	STRINGLINE(1, "String line protocol."),
 	PROTOBUF(2, "Google protobuf protocol."),
-	DELIMITER(3, "Delimiter protocol.");
+	DELIMITER(3, "Delimiter protocol."),
+	JAVA(4, "Java serizlizable protocol.");
 
 	private final int typeId;
 	private final String typeName;
