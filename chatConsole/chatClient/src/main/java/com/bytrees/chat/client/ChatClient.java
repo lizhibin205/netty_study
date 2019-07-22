@@ -27,7 +27,7 @@ public class ChatClient {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("chat client start...");
-		new ChatClient().start(ChatProtocolEnum.JAVA);
+		new ChatClient().start(ChatProtocolEnum.PROTOBUF);
 		logger.info("bye.");
 	}
 
@@ -88,8 +88,12 @@ public class ChatClient {
 		builder.setUserId(USER_ID);
 		builder.setMessage(readLine);
 		ConsoleMessageIdl.ConsoleMessage message = builder.build();
-		//这里消息发送是阻塞的-永远不会粘包
-		future.channel().writeAndFlush(Unpooled.copiedBuffer(message.toByteArray())).sync();
+
+		//一个可以产生粘包的例子
+		for (int i = 1; i<=5; i++) {
+			future.channel().write(message);
+		}
+		future.channel().flush();
 	}
 
 	/**

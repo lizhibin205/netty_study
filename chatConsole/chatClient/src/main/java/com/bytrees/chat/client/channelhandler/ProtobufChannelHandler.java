@@ -4,16 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytrees.chat.message.ConsoleMessageIdl;
-import com.google.protobuf.InvalidProtocolBufferException;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 @ChannelHandler.Sharable
-public class ProtobufChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class ProtobufChannelHandler extends SimpleChannelInboundHandler<ConsoleMessageIdl.ConsoleMessage> {
 	private static final Logger logger = LoggerFactory.getLogger(ProtobufChannelHandler.class);
 
 	@Override
@@ -23,19 +19,12 @@ public class ProtobufChannelHandler extends SimpleChannelInboundHandler<ByteBuf>
 		builder.setUserId(0L);
 		builder.setMessage("hello world!");
 		ConsoleMessageIdl.ConsoleMessage message = builder.build();
-		ctx.writeAndFlush(Unpooled.copiedBuffer(message.toByteArray()));
+		ctx.writeAndFlush(message);
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		byte[] data = new byte[msg.readableBytes()];
-		msg.readBytes(data);
-		try {
-			ConsoleMessageIdl.ConsoleMessage readMessage = ConsoleMessageIdl.ConsoleMessage.parseFrom(data);
-			logger.info("[server]{}", readMessage.getMessage());
-		} catch (InvalidProtocolBufferException ex) {
-			logger.warn("Server message broken.", ex);
-		}
+	public void channelRead0(ChannelHandlerContext ctx, ConsoleMessageIdl.ConsoleMessage msg) throws Exception {
+		logger.info("[server]{}", msg.getMessage());
 	}
 
 	/**
