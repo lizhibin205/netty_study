@@ -36,7 +36,7 @@ export default {
     }
   },
   created: function () {
-    this.clientId = Math.round(Math.random() * 1000) + new Date().getTime();
+    this.clientId = Math.round(Math.random() * 1000) + new Date().getTime()
   },
   methods: {
     wsSendMessage: function () {
