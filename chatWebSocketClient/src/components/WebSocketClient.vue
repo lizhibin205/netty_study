@@ -1,6 +1,9 @@
 <template>
     <div id="wsMessage">
         <el-row>
+          <el-col>client-id:{{clientId}}</el-col>
+        </el-row>
+        <el-row>
             <div id="wsMessageData" ref="wsMessageData">
                 <div v-for="(message, index) in wsMessageList" :key="index">
                     <p :class="message.type + '-message'">{{message.type}} {{message.timeTag}}</p>
@@ -24,12 +27,16 @@
 export default {
   data () {
     return {
+      clientId: 0,
       wsUrl: 'ws://127.0.0.1:9100/ws',
       wsConnectStatus: false,
       wsMessage: '',
       wsMessageList: [],
       websocket: null
     }
+  },
+  created: function () {
+    this.clientId = Math.round(Math.random() * 1000) + new Date().getTime();
   },
   methods: {
     wsSendMessage: function () {
@@ -124,11 +131,11 @@ export default {
     width: 600px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     padding: 10px 10px;
+    font-size: 10px;
   }
   #wsMessageData {
     height: 300px;
     overflow-y: scroll;
-    font-size: 10px;
   }
   .client-message {
       color: green;

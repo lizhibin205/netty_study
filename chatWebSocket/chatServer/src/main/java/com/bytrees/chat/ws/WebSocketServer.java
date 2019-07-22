@@ -24,6 +24,9 @@ public class WebSocketServer {
 		logger.info("bye");
 	}
 
+	/**
+	 * websocket启动
+	 */
 	public void run() {
 		final EventLoopGroup group = new NioEventLoopGroup();
 		final ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);

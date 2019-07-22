@@ -31,10 +31,11 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			//如果握手成功，移除pipeline中的HttpRequestHandler，因为之后不会再使用HTTP
 			ctx.pipeline().remove(HttpRequestHandler.class);
 			//广播加入聊天室
-			group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(channel.toString(), 
-					"加入聊天室")));
+			//group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(channel.toString(), 
+			//		"加入聊天室")));
 			//加入到组中，所有人都可以收到信息
-			group.add(ctx.channel());
+			//group.add(ctx.channel());
+			ctx.channel().writeAndFlush(SimpleMessage.welcome());
 		}
 		super.userEventTriggered(ctx, event);
 	}
@@ -49,9 +50,9 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 
 		//向组里面的其他Channel广播信息
 		//TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
-
-		group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
-				text)));
+		//group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
+		//		text)), matcher);
+		ctx.channel().writeAndFlush(text);
 	}
 
 	class TextWebSocketChannelMatcher implements ChannelMatcher {
