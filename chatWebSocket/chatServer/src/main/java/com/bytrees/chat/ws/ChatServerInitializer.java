@@ -1,18 +1,19 @@
 package com.bytrees.chat.ws;
 
 import com.bytrees.chat.ws.channelhandler.HttpRequestHandler;
+import com.bytrees.chat.ws.channelhandler.PingWebSocketFrameHandler;
 import com.bytrees.chat.ws.channelhandler.TextWebSocketFrameHandler;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
-public class ChatServerInitializer extends ChannelInitializer<Channel> {
+public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 	private final ChannelGroup group;
 
 	public ChatServerInitializer(ChannelGroup group) {
@@ -20,13 +21,19 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
 	}
 
 	@Override
-	protected void initChannel(Channel ch) throws Exception {
+	protected void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		pipeline.addLast(new HttpServerCodec());
-		pipeline.addLast(new ChunkedWriteHandler());
-		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
+		//请求和应答HTTP消息
+		pipeline.addLast("http-codec", new HttpServerCodec());
+		//将HTTP消息的多个部分组合成一条完整的消息
+		pipeline.addLast("aggregator", new HttpObjectAggregator(64 * 1024));
+		//支持浏览器和服务端进行WebSocket通信
+		pipeline.addLast("http-chunked", new ChunkedWriteHandler());
+		//处理HTTP请求
 		pipeline.addLast(new HttpRequestHandler("/ws"));
 		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 		pipeline.addLast(new TextWebSocketFrameHandler(group));
+		//处理WebSocket心跳
+		pipeline.addLast(new PingWebSocketFrameHandler());
 	}
 }

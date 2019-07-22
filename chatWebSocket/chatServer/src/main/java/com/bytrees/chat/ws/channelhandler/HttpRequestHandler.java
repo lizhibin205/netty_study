@@ -76,6 +76,9 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 		}
 	}
 
+	/**
+	 * 异常处理
+	 */
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		logger.error(cause.getMessage(), cause);

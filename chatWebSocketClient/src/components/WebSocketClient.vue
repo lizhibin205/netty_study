@@ -1,26 +1,28 @@
 <template>
-    <div id="wsMessage">
+    <el-card id="wsMessage">
+        <div slot="header" class="clearfix">
+          <span>客户端ID：{{clientId}}</span>
+        </div>
         <el-row>
-          <el-col>client-id:{{clientId}}</el-col>
-        </el-row>
-        <el-row>
+          <el-col :span="24">
             <div id="wsMessageData" ref="wsMessageData">
                 <div v-for="(message, index) in wsMessageList" :key="index">
-                    <p :class="message.type + '-message'">{{message.type}} {{message.timeTag}}</p>
+                    <p :class="message.type + '-message'">{{message.type == 'server' ? '服务器' : '客户端'}} {{message.timeTag}}</p>
                     <p>{{message.message}}</p>
                 </div>
             </div>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="16" ><el-input v-model="wsMessage" placeholder="聊天内容"></el-input></el-col>
             <el-col :span="8" ><el-button v-on:click="wsSendMessage" :disabled="!wsConnectStatus">发送</el-button></el-col>
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="8"><el-input v-model="wsUrl" placeholder="ws://127.0.0.1:9100/ws"></el-input></el-col>
+            <el-col :span="16"><el-input v-model="wsUrl" placeholder="ws://127.0.0.1:9100/ws"></el-input></el-col>
             <el-col :span="8"><el-button type="primary" :disabled="wsConnectStatus" v-on:click="wsConnect">连接</el-button>
             <el-button type="danger" :disabled="!wsConnectStatus" v-on:click="wsDisconnect" >断开</el-button></el-col>
         </el-row>
-    </div>
+    </el-card>
 </template>
 
 <script>
@@ -63,6 +65,11 @@ export default {
     },
     wsDisconnect: function () {
       this.websocket.close()
+      this.wsMessageList.push({
+        'type': 'client',
+        'timeTag': new Date(),
+        'message': '与服务器的连接已断开'
+      })
     },
     wsOnOpen: function () {
       console.log('websocket open.')
@@ -129,9 +136,8 @@ export default {
   }
   #wsMessage {
     width: 600px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     padding: 10px 10px;
-    font-size: 10px;
+    font-size: 12px;
   }
   #wsMessageData {
     height: 300px;

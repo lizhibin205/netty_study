@@ -35,7 +35,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			//		"加入聊天室")));
 			//加入到组中，所有人都可以收到信息
 			//group.add(ctx.channel());
-			ctx.channel().writeAndFlush(SimpleMessage.welcome());
+			ctx.channel().writeAndFlush(stringToFrame(SimpleMessage.welcome()));
 		}
 		super.userEventTriggered(ctx, event);
 	}
@@ -52,7 +52,14 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		//TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
 		//group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
 		//		text)), matcher);
-		ctx.channel().writeAndFlush(text);
+		ctx.channel().writeAndFlush(stringToFrame(text));
+	}
+
+	/**
+	 * 把返回内容包装成Text帧
+	 */
+	private TextWebSocketFrame stringToFrame(String str) {
+		return new TextWebSocketFrame(str);
 	}
 
 	class TextWebSocketChannelMatcher implements ChannelMatcher {

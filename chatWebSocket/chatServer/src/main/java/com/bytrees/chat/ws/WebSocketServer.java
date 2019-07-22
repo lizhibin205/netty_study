@@ -25,7 +25,7 @@ public class WebSocketServer {
 	}
 
 	/**
-	 * websocket启动
+	 * WEBSOCKET SERVER启动
 	 */
 	public void run() {
 		final EventLoopGroup group = new NioEventLoopGroup();
