@@ -2,12 +2,16 @@ task runIdl() {
     println project.name
 
     doFirst() {
-        println "start build all idl..."
+        println "start build all idl files..."
         def projectName = project.name
-        fileTree("idl").each { file ->
-            def command = "protoc --proto_path=$projectName/idl --java_out=$projectName/src/main/java --js_out=$projectName/src/main/javascript $file.name"
-            println command
-            println command.execute().text
+        fileTree(dir: "idl", include: '**/*proto').visit {File file ->
+            println file
+            def command = "protoc --proto_path=$projectName/idl " +
+            "--java_out=$projectName/src/main/java " +
+            "--php_out=$projectName/src/main/php " +
+            "--js_out=$projectName/src/main/javascript $file"
+            //println command
+            //println command.execute().text
         }
     }
 }
