@@ -2,10 +2,16 @@ syntax = "proto3";
 
 package com.bytrees.chat.ws.message;
 
-option java_outer_classname="ConsoleMessageIdl";
+option java_outer_classname="WebSocketMessageIdl";
 
-message ConsoleMessage
-{
-    int64 userId=1;
-    string message=2;
+message WebSocketMessage {
+    int64 clientId = 1;
+    MessageType messageType = 2;
+    string messageContent = 3;
+}
+
+enum MessageType {
+    UNKNOWN = 0;
+    STRING  = 1;
+    JSONOBJ = 2;
 }
