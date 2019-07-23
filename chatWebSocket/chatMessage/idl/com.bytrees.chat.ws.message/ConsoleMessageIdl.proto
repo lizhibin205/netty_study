@@ -3,7 +3,6 @@ syntax = "proto3";
 package com.bytrees.chat.ws.message;
 
 option java_outer_classname="ConsoleMessageIdl";
-option js_outer_classname="ConsoleMessageIdl";
 
 message ConsoleMessage
 {
