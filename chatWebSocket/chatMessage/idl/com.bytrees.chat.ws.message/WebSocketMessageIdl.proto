@@ -8,7 +8,7 @@ message WebSocketMessage {
     int64 clientId = 1; //客户端ID
     MessageType messageType = 2; //消息类型
     string messageContent = 3; //消息内容
-    //消息时间
+    int64 messageTimestamp = 4; //消息时间
 }
 
 enum MessageType {

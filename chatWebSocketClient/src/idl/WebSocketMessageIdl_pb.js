@@ -68,7 +68,8 @@ proto.com.bytrees.chat.ws.message.WebSocketMessage.toObject = function(includeIn
   var f, obj = {
     clientid: jspb.Message.getFieldWithDefault(msg, 1, 0),
     messagetype: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    messagecontent: jspb.Message.getFieldWithDefault(msg, 3, "")
+    messagecontent: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    messagetimestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -116,6 +117,10 @@ proto.com.bytrees.chat.ws.message.WebSocketMessage.deserializeBinaryFromReader =
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessagecontent(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMessagetimestamp(value);
       break;
     default:
       reader.skipField();
@@ -167,6 +172,13 @@ proto.com.bytrees.chat.ws.message.WebSocketMessage.serializeBinaryToWriter = fun
       f
     );
   }
+  f = message.getMessagetimestamp();
+  if (f !== 0) {
+    writer.writeInt64(
+      4,
+      f
+    );
+  }
 };
 
 
@@ -212,6 +224,21 @@ proto.com.bytrees.chat.ws.message.WebSocketMessage.prototype.getMessagecontent =
 /** @param {string} value */
 proto.com.bytrees.chat.ws.message.WebSocketMessage.prototype.setMessagecontent = function(value) {
   jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional int64 messageTimestamp = 4;
+ * @return {number}
+ */
+proto.com.bytrees.chat.ws.message.WebSocketMessage.prototype.getMessagetimestamp = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.com.bytrees.chat.ws.message.WebSocketMessage.prototype.setMessagetimestamp = function(value) {
+  jspb.Message.setProto3IntField(this, 4, value);
 };
 
 

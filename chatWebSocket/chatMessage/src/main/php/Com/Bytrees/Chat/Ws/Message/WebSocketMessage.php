@@ -14,17 +14,29 @@ use Google\Protobuf\Internal\GPBUtil;
 class WebSocketMessage extends \Google\Protobuf\Internal\Message
 {
     /**
+     *客户端ID
+     *
      * Generated from protobuf field <code>int64 clientId = 1;</code>
      */
     private $clientId = 0;
     /**
+     *消息类型
+     *
      * Generated from protobuf field <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      */
     private $messageType = 0;
     /**
+     *消息内容
+     *
      * Generated from protobuf field <code>string messageContent = 3;</code>
      */
     private $messageContent = '';
+    /**
+     *消息时间
+     *
+     * Generated from protobuf field <code>int64 messageTimestamp = 4;</code>
+     */
+    private $messageTimestamp = 0;
 
     /**
      * Constructor.
@@ -33,8 +45,13 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int|string $clientId
+     *          客户端ID
      *     @type int $messageType
+     *          消息类型
      *     @type string $messageContent
+     *          消息内容
+     *     @type int|string $messageTimestamp
+     *          消息时间
      * }
      */
     public function __construct($data = NULL) {
@@ -43,6 +60,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *客户端ID
+     *
      * Generated from protobuf field <code>int64 clientId = 1;</code>
      * @return int|string
      */
@@ -52,6 +71,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *客户端ID
+     *
      * Generated from protobuf field <code>int64 clientId = 1;</code>
      * @param int|string $var
      * @return $this
@@ -65,6 +86,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *消息类型
+     *
      * Generated from protobuf field <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      * @return int
      */
@@ -74,6 +97,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *消息类型
+     *
      * Generated from protobuf field <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      * @param int $var
      * @return $this
@@ -87,6 +112,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *消息内容
+     *
      * Generated from protobuf field <code>string messageContent = 3;</code>
      * @return string
      */
@@ -96,6 +123,8 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *消息内容
+     *
      * Generated from protobuf field <code>string messageContent = 3;</code>
      * @param string $var
      * @return $this
@@ -104,6 +133,32 @@ class WebSocketMessage extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->messageContent = $var;
+
+        return $this;
+    }
+
+    /**
+     *消息时间
+     *
+     * Generated from protobuf field <code>int64 messageTimestamp = 4;</code>
+     * @return int|string
+     */
+    public function getMessageTimestamp()
+    {
+        return $this->messageTimestamp;
+    }
+
+    /**
+     *消息时间
+     *
+     * Generated from protobuf field <code>int64 messageTimestamp = 4;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setMessageTimestamp($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->messageTimestamp = $var;
 
         return $this;
     }

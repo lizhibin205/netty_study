@@ -49,11 +49,7 @@ export default {
       if (this.wsMessage === '') {
         return
       }
-      this.wsMessageList.push({
-        'type': 'client',
-        'timeTag': new Date(),
-        'message': this.wsMessage
-      })
+      this.wsMessageListPush('client', new Date(), this.wsMessage)
       if (this.wsConnectStatus) {
         console.log('websocket send: ' + this.wsMessage)
         let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
@@ -73,11 +69,7 @@ export default {
     },
     wsDisconnect: function () {
       this.websocket.close()
-      this.wsMessageList.push({
-        'type': 'client',
-        'timeTag': new Date(),
-        'message': '与服务器的连接已断开'
-      })
+      this.wsMessageListPush('client', new Date(), '与服务器的连接已断开')
     },
     wsOnOpen: function () {
       this.wsConnectStatus = true
@@ -93,19 +85,10 @@ export default {
           promise.then((arrayBuffer) => {
             let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(arrayBuffer)
             console.log(webSocketMessageDeserialize.toObject())
-            let message = webSocketMessageDeserialize.getMessagecontent()
-              this.wsMessageList.push({
-              'type': 'server',
-              'timeTag': new Date(),
-              'message': message
-            })
+            this.wsMessageListPush('server', new Date(webSocketMessageDeserialize.getMessagetimestamp()), webSocketMessageDeserialize.getMessagecontent())
           })
       } else {
-        this.wsMessageList.push({
-          'type': 'server',
-          'timeTag': new Date(),
-          'message': event.data
-        })
+        this.wsMessageListPush('server', new Date(), event.data)
         console.log('websocket received: ' + event.data)
       }
     },
@@ -122,14 +105,17 @@ export default {
       let bytes = webSocketMessage.serializeBinary()
       let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(bytes)
       console.log(webSocketMessageDeserialize.toObject())
+    },
+    wsMessageListPush: function (type, timeTag, message) {
+      this.wsMessageList.push({
+        'type': type,
+        'timeTag': timeTag,
+        'message': message
+      })
     }
   },
   mounted: function () {
-    this.wsMessageList.push({
-      'type': 'client',
-      'timeTag': new Date(),
-      'message': '客户端初始化完成'
-    })
+    this.wsMessageListPush('client', new Date(), '客户端初始化完成')
   },
   watch: {
     wsMessage: function (newVal, oldVal) {},

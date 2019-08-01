@@ -1,5 +1,7 @@
 package com.bytrees.chat.ws.channelhandler;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +43,7 @@ public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<Bin
 		builder.setClientId(0L);
 		builder.setMessageType(WebSocketMessageIdl.MessageType.STRING);
 		builder.setMessageContent(str);
+		builder.setMessageTimestamp(new Date().getTime());
 		return new BinaryWebSocketFrame(Unpooled.copiedBuffer(builder.build().toByteArray()));
 	}
 }

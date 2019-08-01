@@ -126,28 +126,57 @@ public final class WebSocketMessageIdl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     *客户端ID
+     * </pre>
+     *
      * <code>int64 clientId = 1;</code>
      */
     long getClientId();
 
     /**
+     * <pre>
+     *消息类型
+     * </pre>
+     *
      * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      */
     int getMessageTypeValue();
     /**
+     * <pre>
+     *消息类型
+     * </pre>
+     *
      * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      */
     com.bytrees.chat.ws.message.WebSocketMessageIdl.MessageType getMessageType();
 
     /**
+     * <pre>
+     *消息内容
+     * </pre>
+     *
      * <code>string messageContent = 3;</code>
      */
     java.lang.String getMessageContent();
     /**
+     * <pre>
+     *消息内容
+     * </pre>
+     *
      * <code>string messageContent = 3;</code>
      */
     com.google.protobuf.ByteString
         getMessageContentBytes();
+
+    /**
+     * <pre>
+     *消息时间
+     * </pre>
+     *
+     * <code>int64 messageTimestamp = 4;</code>
+     */
+    long getMessageTimestamp();
   }
   /**
    * Protobuf type {@code com.bytrees.chat.ws.message.WebSocketMessage}
@@ -213,6 +242,11 @@ public final class WebSocketMessageIdl {
               messageContent_ = s;
               break;
             }
+            case 32: {
+
+              messageTimestamp_ = input.readInt64();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -248,6 +282,10 @@ public final class WebSocketMessageIdl {
     public static final int CLIENTID_FIELD_NUMBER = 1;
     private long clientId_;
     /**
+     * <pre>
+     *客户端ID
+     * </pre>
+     *
      * <code>int64 clientId = 1;</code>
      */
     public long getClientId() {
@@ -257,12 +295,20 @@ public final class WebSocketMessageIdl {
     public static final int MESSAGETYPE_FIELD_NUMBER = 2;
     private int messageType_;
     /**
+     * <pre>
+     *消息类型
+     * </pre>
+     *
      * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      */
     public int getMessageTypeValue() {
       return messageType_;
     }
     /**
+     * <pre>
+     *消息类型
+     * </pre>
+     *
      * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
      */
     public com.bytrees.chat.ws.message.WebSocketMessageIdl.MessageType getMessageType() {
@@ -274,6 +320,10 @@ public final class WebSocketMessageIdl {
     public static final int MESSAGECONTENT_FIELD_NUMBER = 3;
     private volatile java.lang.Object messageContent_;
     /**
+     * <pre>
+     *消息内容
+     * </pre>
+     *
      * <code>string messageContent = 3;</code>
      */
     public java.lang.String getMessageContent() {
@@ -289,6 +339,10 @@ public final class WebSocketMessageIdl {
       }
     }
     /**
+     * <pre>
+     *消息内容
+     * </pre>
+     *
      * <code>string messageContent = 3;</code>
      */
     public com.google.protobuf.ByteString
@@ -303,6 +357,19 @@ public final class WebSocketMessageIdl {
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
+    }
+
+    public static final int MESSAGETIMESTAMP_FIELD_NUMBER = 4;
+    private long messageTimestamp_;
+    /**
+     * <pre>
+     *消息时间
+     * </pre>
+     *
+     * <code>int64 messageTimestamp = 4;</code>
+     */
+    public long getMessageTimestamp() {
+      return messageTimestamp_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -328,6 +395,9 @@ public final class WebSocketMessageIdl {
       if (!getMessageContentBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, messageContent_);
       }
+      if (messageTimestamp_ != 0L) {
+        output.writeInt64(4, messageTimestamp_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -347,6 +417,10 @@ public final class WebSocketMessageIdl {
       }
       if (!getMessageContentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, messageContent_);
+      }
+      if (messageTimestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, messageTimestamp_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -368,6 +442,8 @@ public final class WebSocketMessageIdl {
       if (messageType_ != other.messageType_) return false;
       if (!getMessageContent()
           .equals(other.getMessageContent())) return false;
+      if (getMessageTimestamp()
+          != other.getMessageTimestamp()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -386,6 +462,9 @@ public final class WebSocketMessageIdl {
       hash = (53 * hash) + messageType_;
       hash = (37 * hash) + MESSAGECONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getMessageContent().hashCode();
+      hash = (37 * hash) + MESSAGETIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getMessageTimestamp());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -525,6 +604,8 @@ public final class WebSocketMessageIdl {
 
         messageContent_ = "";
 
+        messageTimestamp_ = 0L;
+
         return this;
       }
 
@@ -554,6 +635,7 @@ public final class WebSocketMessageIdl {
         result.clientId_ = clientId_;
         result.messageType_ = messageType_;
         result.messageContent_ = messageContent_;
+        result.messageTimestamp_ = messageTimestamp_;
         onBuilt();
         return result;
       }
@@ -612,6 +694,9 @@ public final class WebSocketMessageIdl {
           messageContent_ = other.messageContent_;
           onChanged();
         }
+        if (other.getMessageTimestamp() != 0L) {
+          setMessageTimestamp(other.getMessageTimestamp());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -643,12 +728,20 @@ public final class WebSocketMessageIdl {
 
       private long clientId_ ;
       /**
+       * <pre>
+       *客户端ID
+       * </pre>
+       *
        * <code>int64 clientId = 1;</code>
        */
       public long getClientId() {
         return clientId_;
       }
       /**
+       * <pre>
+       *客户端ID
+       * </pre>
+       *
        * <code>int64 clientId = 1;</code>
        */
       public Builder setClientId(long value) {
@@ -658,6 +751,10 @@ public final class WebSocketMessageIdl {
         return this;
       }
       /**
+       * <pre>
+       *客户端ID
+       * </pre>
+       *
        * <code>int64 clientId = 1;</code>
        */
       public Builder clearClientId() {
@@ -669,12 +766,20 @@ public final class WebSocketMessageIdl {
 
       private int messageType_ = 0;
       /**
+       * <pre>
+       *消息类型
+       * </pre>
+       *
        * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
        */
       public int getMessageTypeValue() {
         return messageType_;
       }
       /**
+       * <pre>
+       *消息类型
+       * </pre>
+       *
        * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
        */
       public Builder setMessageTypeValue(int value) {
@@ -683,6 +788,10 @@ public final class WebSocketMessageIdl {
         return this;
       }
       /**
+       * <pre>
+       *消息类型
+       * </pre>
+       *
        * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
        */
       public com.bytrees.chat.ws.message.WebSocketMessageIdl.MessageType getMessageType() {
@@ -691,6 +800,10 @@ public final class WebSocketMessageIdl {
         return result == null ? com.bytrees.chat.ws.message.WebSocketMessageIdl.MessageType.UNRECOGNIZED : result;
       }
       /**
+       * <pre>
+       *消息类型
+       * </pre>
+       *
        * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
        */
       public Builder setMessageType(com.bytrees.chat.ws.message.WebSocketMessageIdl.MessageType value) {
@@ -703,6 +816,10 @@ public final class WebSocketMessageIdl {
         return this;
       }
       /**
+       * <pre>
+       *消息类型
+       * </pre>
+       *
        * <code>.com.bytrees.chat.ws.message.MessageType messageType = 2;</code>
        */
       public Builder clearMessageType() {
@@ -714,6 +831,10 @@ public final class WebSocketMessageIdl {
 
       private java.lang.Object messageContent_ = "";
       /**
+       * <pre>
+       *消息内容
+       * </pre>
+       *
        * <code>string messageContent = 3;</code>
        */
       public java.lang.String getMessageContent() {
@@ -729,6 +850,10 @@ public final class WebSocketMessageIdl {
         }
       }
       /**
+       * <pre>
+       *消息内容
+       * </pre>
+       *
        * <code>string messageContent = 3;</code>
        */
       public com.google.protobuf.ByteString
@@ -745,6 +870,10 @@ public final class WebSocketMessageIdl {
         }
       }
       /**
+       * <pre>
+       *消息内容
+       * </pre>
+       *
        * <code>string messageContent = 3;</code>
        */
       public Builder setMessageContent(
@@ -758,6 +887,10 @@ public final class WebSocketMessageIdl {
         return this;
       }
       /**
+       * <pre>
+       *消息内容
+       * </pre>
+       *
        * <code>string messageContent = 3;</code>
        */
       public Builder clearMessageContent() {
@@ -767,6 +900,10 @@ public final class WebSocketMessageIdl {
         return this;
       }
       /**
+       * <pre>
+       *消息内容
+       * </pre>
+       *
        * <code>string messageContent = 3;</code>
        */
       public Builder setMessageContentBytes(
@@ -777,6 +914,44 @@ public final class WebSocketMessageIdl {
   checkByteStringIsUtf8(value);
         
         messageContent_ = value;
+        onChanged();
+        return this;
+      }
+
+      private long messageTimestamp_ ;
+      /**
+       * <pre>
+       *消息时间
+       * </pre>
+       *
+       * <code>int64 messageTimestamp = 4;</code>
+       */
+      public long getMessageTimestamp() {
+        return messageTimestamp_;
+      }
+      /**
+       * <pre>
+       *消息时间
+       * </pre>
+       *
+       * <code>int64 messageTimestamp = 4;</code>
+       */
+      public Builder setMessageTimestamp(long value) {
+        
+        messageTimestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *消息时间
+       * </pre>
+       *
+       * <code>int64 messageTimestamp = 4;</code>
+       */
+      public Builder clearMessageTimestamp() {
+        
+        messageTimestamp_ = 0L;
         onChanged();
         return this;
       }
@@ -848,12 +1023,13 @@ public final class WebSocketMessageIdl {
   static {
     java.lang.String[] descriptorData = {
       "\n\031WebSocketMessageIdl.proto\022\033com.bytrees" +
-      ".chat.ws.message\"{\n\020WebSocketMessage\022\020\n\010" +
-      "clientId\030\001 \001(\003\022=\n\013messageType\030\002 \001(\0162(.co" +
-      "m.bytrees.chat.ws.message.MessageType\022\026\n" +
-      "\016messageContent\030\003 \001(\t*3\n\013MessageType\022\013\n\007" +
-      "UNKNOWN\020\000\022\n\n\006STRING\020\001\022\013\n\007JSONOBJ\020\002B\025B\023We" +
-      "bSocketMessageIdlb\006proto3"
+      ".chat.ws.message\"\225\001\n\020WebSocketMessage\022\020\n" +
+      "\010clientId\030\001 \001(\003\022=\n\013messageType\030\002 \001(\0162(.c" +
+      "om.bytrees.chat.ws.message.MessageType\022\026" +
+      "\n\016messageContent\030\003 \001(\t\022\030\n\020messageTimesta" +
+      "mp\030\004 \001(\003*3\n\013MessageType\022\013\n\007UNKNOWN\020\000\022\n\n\006" +
+      "STRING\020\001\022\013\n\007JSONOBJ\020\002B\025B\023WebSocketMessag" +
+      "eIdlb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -864,7 +1040,7 @@ public final class WebSocketMessageIdl {
     internal_static_com_bytrees_chat_ws_message_WebSocketMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_bytrees_chat_ws_message_WebSocketMessage_descriptor,
-        new java.lang.String[] { "ClientId", "MessageType", "MessageContent", });
+        new java.lang.String[] { "ClientId", "MessageType", "MessageContent", "MessageTimestamp", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
