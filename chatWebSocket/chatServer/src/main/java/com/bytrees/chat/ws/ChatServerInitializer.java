@@ -1,5 +1,6 @@
 package com.bytrees.chat.ws;
 
+import com.bytrees.chat.ws.channelhandler.BinaryWebSocketFrameHandler;
 import com.bytrees.chat.ws.channelhandler.HttpRequestHandler;
 import com.bytrees.chat.ws.channelhandler.PingWebSocketFrameHandler;
 import com.bytrees.chat.ws.channelhandler.TextWebSocketFrameHandler;
@@ -38,7 +39,7 @@ public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 		//处理WebSocket文本帧
 		pipeline.addLast(new TextWebSocketFrameHandler(group, taskExecutors));
 		//处理二进制帧
-		//
+		pipeline.addLast(new BinaryWebSocketFrameHandler(group, taskExecutors));
 		//处理WebSocket心跳
 		pipeline.addLast(new PingWebSocketFrameHandler());
 	}

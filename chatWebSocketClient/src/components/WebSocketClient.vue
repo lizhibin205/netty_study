@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import WebSocketMessageIdl from '../idl/WebSocketMessageIdl_pb.js'
+
 export default {
   data () {
     return {
@@ -39,7 +41,9 @@ export default {
   },
   created: function () {
     this.clientId = Math.round(Math.random() * 1000) + new Date().getTime()
-  },
+    console.log('Client id: ' + this.clientId)
+    this.webSocketMessageTest()
+},
   methods: {
     wsSendMessage: function () {
       if (this.wsMessage === '') {
@@ -52,7 +56,11 @@ export default {
       })
       if (this.wsConnectStatus) {
         console.log('websocket send: ' + this.wsMessage)
-        this.websocket.send(this.wsMessage)
+        let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
+        webSocketMessage.setClientid(this.clientId)
+        webSocketMessage.setMessagetype(WebSocketMessageIdl.MessageType.STRING)
+        webSocketMessage.setMessagecontent(this.wsMessage)
+        this.websocket.send(webSocketMessage.serializeBinary())
       }
     },
     wsConnect: function () {
@@ -72,23 +80,48 @@ export default {
       })
     },
     wsOnOpen: function () {
-      console.log('websocket open.')
       this.wsConnectStatus = true
+      console.log('websocket open.')
     },
     wsOnError: function (event) {
       console.log('websocket error: ' + event)
     },
     wsOnMessage: function (event) {
-      console.log('websocket received: ' + event)
-      this.wsMessageList.push({
-        'type': 'server',
-        'timeTag': new Date(),
-        'message': event.data
-      })
+      console.log(event.data)
+      if (event.data instanceof Blob) {
+          let promise = new Response(event.data).arrayBuffer()
+          promise.then((arrayBuffer) => {
+            let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(arrayBuffer)
+            console.log(webSocketMessageDeserialize.toObject())
+            let message = webSocketMessageDeserialize.getMessagecontent()
+              this.wsMessageList.push({
+              'type': 'server',
+              'timeTag': new Date(),
+              'message': message
+            })
+          })
+      } else {
+        this.wsMessageList.push({
+          'type': 'server',
+          'timeTag': new Date(),
+          'message': event.data
+        })
+        console.log('websocket received: ' + event.data)
+      }
     },
     wsOnClose: function () {
-      console.log('websocket close.')
       this.wsConnectStatus = false
+      console.log('websocket close.')
+    },
+    webSocketMessageTest: function () {
+      let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
+      webSocketMessage.setClientid(this.clientId)
+      webSocketMessage.setMessagetype(WebSocketMessageIdl.MessageType.UNKNOWN)
+      webSocketMessage.setMessagecontent('client created.')
+      console.log(webSocketMessage.toObject())
+      let bytes = webSocketMessage.serializeBinary()
+      let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(bytes)
+      console.log(webSocketMessageDeserialize.toObject())
     }
   },
   mounted: function () {
@@ -102,7 +135,6 @@ export default {
     wsMessage: function (newVal, oldVal) {},
     wsMessageList: function (newVal, oldVal) {
       setTimeout(() => {
-        console.log('wsMessageList scroll')
         this.$refs.wsMessageData.scrollTop = this.$refs.wsMessageData.scrollHeight
       }, 200)
     }
