@@ -54,7 +54,6 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		//TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
 		//group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
 		//		text)), matcher);
-		
 		ctx.channel().writeAndFlush(stringToFrame(text));
 	}
 

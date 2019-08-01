@@ -11,7 +11,7 @@ task runIdl() {
             def command = "protoc --proto_path=$fileDir " +
             "--java_out=$projectName/src/main/java " +
             "--php_out=$projectName/src/main/php " +
-            "--js_out=$projectName/src/main/javascript $fileName"
+            "--js_out=import_style=commonjs,binary:$projectName/src/main/javascript $fileName"
             println command
             println command.execute().text
         }

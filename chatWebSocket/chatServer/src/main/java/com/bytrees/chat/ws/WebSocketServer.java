@@ -1,6 +1,7 @@
 package com.bytrees.chat.ws;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class WebSocketServer {
 		//定义聊天的频道组
 		final ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
 		//定义业务线程池
-		TaskExecutors taskExecutors = new TaskExecutors();
+		TaskExecutors taskExecutors = new TaskExecutors(2, 5, 60L, TimeUnit.SECONDS);
 
 		ServerBootstrap boot = new ServerBootstrap();
 		boot.group(group, childGroup)

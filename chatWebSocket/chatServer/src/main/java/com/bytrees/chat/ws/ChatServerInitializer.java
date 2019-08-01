@@ -37,6 +37,8 @@ public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 		//处理WebSocket文本帧
 		pipeline.addLast(new TextWebSocketFrameHandler(group, taskExecutors));
+		//处理二进制帧
+		//
 		//处理WebSocket心跳
 		pipeline.addLast(new PingWebSocketFrameHandler());
 	}
