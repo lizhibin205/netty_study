@@ -15,7 +15,9 @@
         </el-row>
         <el-row :gutter="20">
             <el-col :span="16" ><el-input v-model="wsMessage" placeholder="聊天内容"></el-input></el-col>
-            <el-col :span="8" ><el-button v-on:click="wsSendMessage" :disabled="!wsConnectStatus">发送</el-button></el-col>
+            <el-col :span="8" ><el-button v-on:click="wsSendMessage" :disabled="!wsConnectStatus">发送</el-button>
+              <el-switch v-model="wsMessageType" active-value="binary" inactive-value="string" active-text="binary"></el-switch>
+            </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="16"><el-input v-model="wsUrl" placeholder="ws://127.0.0.1:9100/ws"></el-input></el-col>
@@ -34,6 +36,7 @@ export default {
       clientId: 0,
       wsUrl: 'ws://127.0.0.1:9100/ws',
       wsConnectStatus: false,
+      wsMessageType: 'string',
       wsMessage: '',
       wsMessageList: [],
       websocket: null
@@ -51,12 +54,16 @@ export default {
       }
       this.wsMessageListPush('client', new Date(), this.wsMessage)
       if (this.wsConnectStatus) {
+        if (this.wsMessageType == 'binary') {
+          let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
+          webSocketMessage.setClientid(this.clientId)
+          webSocketMessage.setMessagetype(WebSocketMessageIdl.MessageType.STRING)
+          webSocketMessage.setMessagecontent(this.wsMessage)
+          this.websocket.send(webSocketMessage.serializeBinary())
+        } else {
+          this.websocket.send(this.wsMessage)
+        }
         console.log('websocket send: ' + this.wsMessage)
-        let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
-        webSocketMessage.setClientid(this.clientId)
-        webSocketMessage.setMessagetype(WebSocketMessageIdl.MessageType.STRING)
-        webSocketMessage.setMessagecontent(this.wsMessage)
-        this.websocket.send(webSocketMessage.serializeBinary())
       }
     },
     wsConnect: function () {
