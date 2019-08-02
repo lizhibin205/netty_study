@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.bytrees.chat.ws.room.SimpleMessage;
 import com.bytrees.chat.ws.task.TaskExecutors;
+import com.bytrees.chat.ws.task.TextFrameTask;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,7 +37,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			//加入到组中，所有人都可以收到信息
 			group.add(ctx.channel());
 			//通知客户端连接成功
-			ctx.channel().writeAndFlush(stringToFrame(SimpleMessage.welcome()));
+			ctx.channel().writeAndFlush(new TextWebSocketFrame(SimpleMessage.welcome()));
 		}
 		super.userEventTriggered(ctx, event);
 	}
@@ -54,14 +55,9 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		//TextWebSocketChannelMatcher matcher = new TextWebSocketChannelMatcher(ctx.channel());
 		//group.writeAndFlush(new TextWebSocketFrame(SimpleMessage.serverMessage(ctx.channel().toString(), 
 		//		text)), matcher);
-		ctx.channel().writeAndFlush(stringToFrame(text));
-	}
 
-	/**
-	 * 把返回内容包装成Text帧
-	 */
-	private TextWebSocketFrame stringToFrame(String str) {
-		return new TextWebSocketFrame(str);
+		//使用业务线程池执行任务
+		taskExecutors.execute(new TextFrameTask(ctx, text));
 	}
 
 	/**

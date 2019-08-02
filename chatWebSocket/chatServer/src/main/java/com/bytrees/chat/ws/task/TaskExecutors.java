@@ -1,5 +1,6 @@
 package com.bytrees.chat.ws.task;
 
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +41,10 @@ public class TaskExecutors {
 	 * 执行任务
 	 */
 	public void execute(Runnable r) {
-		threadPoolExecutor.execute(r);
+		try {
+			threadPoolExecutor.execute(r);
+		} catch (RejectedExecutionException ex) {
+			logger.error("Chat-Server-Business Overload.");
+		}
 	}
 }
