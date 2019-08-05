@@ -1,5 +1,7 @@
 package com.bytrees.chat.ws.task;
 
+import com.bytrees.chat.ws.qa.QuestionAnsweringSystem;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
@@ -14,8 +16,9 @@ public class TextFrameTask implements Runnable {
 
 	@Override
 	public void run() {
-		StringBuilder strBuilder = new StringBuilder("Server Received: ");
-		strBuilder.append(message);
-		ctx.channel().writeAndFlush(new TextWebSocketFrame(strBuilder.toString()));
+		//StringBuilder strBuilder = new StringBuilder("Server Received: ");
+		//strBuilder.append(message);
+		String answer = QuestionAnsweringSystem.answer(message);
+		ctx.channel().writeAndFlush(new TextWebSocketFrame(answer));
 	}
 }
