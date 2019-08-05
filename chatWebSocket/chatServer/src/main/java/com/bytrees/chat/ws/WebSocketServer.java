@@ -3,6 +3,7 @@ package com.bytrees.chat.ws;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+import org.apdplat.qa.SharedQuestionAnsweringSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ public class WebSocketServer {
 	private static final int CHILD_GROUP_THREAD_NUMBER = 5;
 
 	public static void main(String[] args) {
+		SharedQuestionAnsweringSystem.getInstance();
 		logger.info("Starting web socket server...");
 		new WebSocketServer().run();
 		logger.info("bye");
