@@ -8,7 +8,6 @@ import com.bytrees.chat.ws.task.TaskExecutors;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
@@ -16,11 +15,9 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
-	private final ChannelGroup group;
 	private final TaskExecutors taskExecutors;
 
-	public ChatServerInitializer(ChannelGroup group, TaskExecutors taskExecutors) {
-		this.group = group;
+	public ChatServerInitializer(TaskExecutors taskExecutors) {
 		this.taskExecutors = taskExecutors;
 	}
 
@@ -37,9 +34,9 @@ public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast(new HttpRequestHandler("/ws"));
 		pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 		//处理WebSocket文本帧
-		pipeline.addLast(new TextWebSocketFrameHandler(group, taskExecutors));
+		pipeline.addLast(new TextWebSocketFrameHandler(taskExecutors));
 		//处理二进制帧
-		pipeline.addLast(new BinaryWebSocketFrameHandler(group, taskExecutors));
+		pipeline.addLast(new BinaryWebSocketFrameHandler(taskExecutors));
 		//处理WebSocket心跳
 		pipeline.addLast(new PingWebSocketFrameHandler());
 	}

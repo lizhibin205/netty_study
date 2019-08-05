@@ -1,6 +1,7 @@
 package com.bytrees.chat.ws.task;
 
 import com.bytrees.chat.ws.message.WebSocketMessageIdl.WebSocketMessage;
+import com.bytrees.chat.ws.qa.QuestionAnsweringSystem;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -11,8 +12,7 @@ public class BinaryFrameTask extends AbstractBinaryFrameTask {
 
 	@Override
 	public void run() {
-		StringBuilder strBuilder = new StringBuilder("Server Received: ");
-		strBuilder.append(message.getMessageContent());
-		ctx.writeAndFlush(stringToBinaryFrame(strBuilder.toString()));
+		String answer = QuestionAnsweringSystem.answer(message.getMessageContent());
+		ctx.writeAndFlush(stringToBinaryFrame(answer));
 	}
 }

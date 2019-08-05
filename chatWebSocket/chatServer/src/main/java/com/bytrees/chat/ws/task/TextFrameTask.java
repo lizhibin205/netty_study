@@ -16,8 +16,6 @@ public class TextFrameTask implements Runnable {
 
 	@Override
 	public void run() {
-		//StringBuilder strBuilder = new StringBuilder("Server Received: ");
-		//strBuilder.append(message);
 		String answer = QuestionAnsweringSystem.answer(message);
 		ctx.channel().writeAndFlush(new TextWebSocketFrame(answer));
 	}

@@ -11,12 +11,9 @@ import com.bytrees.chat.ws.task.TaskExecutors;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import io.netty.util.concurrent.ImmediateEventExecutor;
 
 public class WebSocketServer {
 	private static final int SERVER_PORT = 9100;
@@ -39,15 +36,13 @@ public class WebSocketServer {
 				new DefaultThreadFactory("Chat-Server-Boss", true));
 		final EventLoopGroup childGroup = new NioEventLoopGroup(CHILD_GROUP_THREAD_NUMBER, 
 				new DefaultThreadFactory("Chat-Server-Worker", true));
-		//定义聊天的频道组
-		final ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
 		//定义业务线程池
 		TaskExecutors taskExecutors = new TaskExecutors(2, 5, 60L, TimeUnit.SECONDS);
 
 		ServerBootstrap boot = new ServerBootstrap();
 		boot.group(group, childGroup)
 		.channel(NioServerSocketChannel.class)
-		.childHandler(new ChatServerInitializer(channelGroup, taskExecutors));
+		.childHandler(new ChatServerInitializer(taskExecutors));
 		//绑定服务器端口
 		ChannelFuture future = boot.bind(new InetSocketAddress(SERVER_PORT));
 		//如果使用sync则要处理InterruptedException
@@ -59,7 +54,6 @@ public class WebSocketServer {
 				if (future.channel() != null) {
 					future.channel().close();
 				}
-				channelGroup.close();
 				group.shutdownGracefully();
 				childGroup.shutdownGracefully();
 			}

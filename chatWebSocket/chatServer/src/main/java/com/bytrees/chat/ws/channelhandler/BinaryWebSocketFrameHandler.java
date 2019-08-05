@@ -10,16 +10,13 @@ import com.bytrees.chat.ws.task.TaskExecutors;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 
 public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<BinaryWebSocketFrame> {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryWebSocketFrameHandler.class);
-	private final ChannelGroup group;
 	private final TaskExecutors taskExecutors;
 
-	public BinaryWebSocketFrameHandler(ChannelGroup group, TaskExecutors taskExecutors) {
-		this.group = group;
+	public BinaryWebSocketFrameHandler(TaskExecutors taskExecutors) {
 		this.taskExecutors = taskExecutors;
 	}
 
