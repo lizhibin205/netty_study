@@ -46,7 +46,7 @@ export default {
     this.clientId = Math.round(Math.random() * 1000) + new Date().getTime()
     console.log('Client id: ' + this.clientId)
     this.webSocketMessageTest()
-},
+  },
   methods: {
     wsSendMessage: function () {
       if (this.wsMessage === '') {
@@ -54,7 +54,7 @@ export default {
       }
       this.wsMessageListPush('client', new Date(), this.wsMessage)
       if (this.wsConnectStatus) {
-        if (this.wsMessageType == 'binary') {
+        if (this.wsMessageType === 'binary') {
           let webSocketMessage = new WebSocketMessageIdl.WebSocketMessage()
           webSocketMessage.setClientid(this.clientId)
           webSocketMessage.setMessagetype(WebSocketMessageIdl.MessageType.STRING)
@@ -88,12 +88,12 @@ export default {
     wsOnMessage: function (event) {
       console.log(event.data)
       if (event.data instanceof Blob) {
-          let promise = new Response(event.data).arrayBuffer()
-          promise.then((arrayBuffer) => {
-            let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(arrayBuffer)
-            console.log(webSocketMessageDeserialize.toObject())
-            this.wsMessageListPush('server', new Date(webSocketMessageDeserialize.getMessagetimestamp()), webSocketMessageDeserialize.getMessagecontent())
-          })
+        let promise = new Response(event.data).arrayBuffer()
+        promise.then((arrayBuffer) => {
+          let webSocketMessageDeserialize = new WebSocketMessageIdl.WebSocketMessage.deserializeBinary(arrayBuffer)
+          console.log(webSocketMessageDeserialize.toObject())
+          this.wsMessageListPush('server', new Date(webSocketMessageDeserialize.getMessagetimestamp()), webSocketMessageDeserialize.getMessagecontent())
+        })
       } else {
         this.wsMessageListPush('server', new Date(), event.data)
         console.log('websocket received: ' + event.data)
