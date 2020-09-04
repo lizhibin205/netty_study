@@ -33,4 +33,12 @@ public class BinaryWebSocketFrameHandler extends SimpleChannelInboundHandler<Bin
 		//使用业务线程池执行任务
 		taskExecutors.execute(new BinaryFrameTask(ctx, message));
 	}
+
+	/**
+	 * 返回ChannelGroup
+	 * @return
+	 */
+	public ChannelGroup getGroup() {
+		return group;
+	}
 }
